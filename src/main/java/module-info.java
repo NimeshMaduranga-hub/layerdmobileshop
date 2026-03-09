@@ -4,7 +4,8 @@ module lk.ijse.layerdmobileshop.mobileshop {
 
     requires com.dlsc.formsfx;
     requires jdk.jdi;
-    requires java.sql;
+    requires static lombok;
+    requires jakarta.persistence;
 
     opens lk.ijse.layerdmobileshop.mobileshop to javafx.fxml;
     exports lk.ijse.layerdmobileshop.mobileshop;
