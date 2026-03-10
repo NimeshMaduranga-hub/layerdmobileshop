@@ -6,9 +6,13 @@ module lk.ijse.layerdmobileshop.mobileshop {
     requires jdk.jdi;
     requires static lombok;
     requires jakarta.persistence;
+    requires com.jfoenix;
 
     opens lk.ijse.layerdmobileshop.mobileshop to javafx.fxml;
     exports lk.ijse.layerdmobileshop.mobileshop;
     exports lk.ijse.layerdmobileshop.mobileshop.controller;
     opens lk.ijse.layerdmobileshop.mobileshop.controller to javafx.fxml;
+    opens lk.ijse.layerdmobileshop.mobileshop.entity to javafx.base;
+
+
 }
