@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.LoginControllerForm">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="800.0">
+         <image>
+            <Image url="@image/Untitled%20(12).png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txtUserName" layoutX="236.0" layoutY="300.0" opacity="0.75" prefHeight="40.0" prefWidth="345.0" promptText="Username" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="txtPassword" layoutX="234.0" layoutY="393.0" maxWidth="403.0" opacity="0.75" prefHeight="40.0" prefWidth="345.0" promptText="Password" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
+         <font>
+            <Font size="15.0" />
+         </font></PasswordField>
+      <Button layoutX="380.0" layoutY="470.0" mnemonicParsing="false" onAction="#btnLoginOnAction" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #6B1240; -fx-background-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;" text="LOGIN">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+
+
+      <Hyperlink layoutX="420.0" layoutY="520.0" text="Sign Up" textFill="#fffdb9">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Hyperlink>
+      <ImageView>
+         <image>
+            <Image url="@icon/icons8-loading-infinity.gif" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
