@@ -74,10 +74,12 @@ public class CustomerviewController {
                 txtCustomerId.setText(newValue.getId());
                 txtCustomerName.setText(newValue.getName());
                 txtCustomerAddress.setText(newValue.getAddress());
+                txtCustomerMobile.setText(newValue.getMobile());
 
                 txtCustomerId.setDisable(false);
                 txtCustomerName.setDisable(false);
                 txtCustomerAddress.setDisable(false);
+                txtCustomerMobile.setDisable(false);
             }
         });
 
@@ -198,6 +200,7 @@ public class CustomerviewController {
             Customer selectedCustomer = tblCustomers.getSelectionModel().getSelectedItem();
             selectedCustomer.setName(name);
             selectedCustomer.setAddress(address);
+            selectedCustomer.setMobile(mobile);
             tblCustomers.refresh();
         }
 
@@ -227,6 +230,7 @@ public class CustomerviewController {
         txtCustomerId.setText(generateNewId());
         txtCustomerName.clear();
         txtCustomerAddress.clear();
+        txtCustomerMobile.clear();
         txtCustomerName.requestFocus();
         btnSave.setDisable(false);
         btnSave.setText("Save");

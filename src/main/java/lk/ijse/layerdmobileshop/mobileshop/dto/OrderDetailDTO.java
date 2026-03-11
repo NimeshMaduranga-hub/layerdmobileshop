@@ -6,17 +6,23 @@ public class OrderDetailDTO {
 
     private String OrderId;
     private String itemCode;
+    private String Code;
     private int qty;
     private BigDecimal unitPrice;
+    private BigDecimal total;
+    private String description;
+
+
 
     public OrderDetailDTO(){
 
     }
 
-    public OrderDetailDTO(String itemCode, int qty, BigDecimal unitPrice) {
+    public OrderDetailDTO(String itemCode, int qty, BigDecimal unitPrice,BigDecimal total) {
         this.itemCode = itemCode;
         this.qty = qty;
         this.unitPrice = unitPrice;
+        this.total = total;
     }
 
     public OrderDetailDTO(String orderId, String itemCode, int qty, BigDecimal unitPrice) {
@@ -24,6 +30,22 @@ public class OrderDetailDTO {
         this.itemCode = itemCode;
         this.qty = qty;
         this.unitPrice = unitPrice;
+    }
+
+    public OrderDetailDTO(String itemCode, String description, int qty, BigDecimal unitPrice, BigDecimal total) {
+        this.itemCode=itemCode;
+        this.description=description;
+        this.qty=qty;
+        this.unitPrice=unitPrice;
+        this.total=total;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public String getOrderId() {
@@ -58,13 +80,32 @@ public class OrderDetailDTO {
         this.unitPrice = unitPrice;
     }
 
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String code) {
+        Code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "OrderDetailDTO{" +
                 "OrderId='" + OrderId + '\'' +
                 ", itemCode='" + itemCode + '\'' +
+                ", Code='" + Code + '\'' +
                 ", qty=" + qty +
                 ", unitPrice=" + unitPrice +
+                ", total=" + total +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.UserandPeopleController">
+
+    <children>
+      <ImageView fitHeight="644.0" fitWidth="800.0">
+         <image>
+            <Image url="@image/userandpeople.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="lblUser" layoutX="120.0" layoutY="65.0" prefHeight="20.0" prefWidth="100.0" />
+      <Button fx:id="btnUserAndPeople" layoutY="172.0" mnemonicParsing="false" onAction="#btnUserAndPeopleOnAction" opacity="0.0" prefHeight="41.0" prefWidth="210.0" text="UserAndPeople" />
+      <Button fx:id="btnOrdersAndItems" layoutY="231.0" mnemonicParsing="false" onAction="#btnOrdersAndItemsOnAction" opacity="0.84" prefHeight="41.0" prefWidth="210.0" text="Orders &amp; Items" />
+      <Button fx:id="btnSuppliersGroup" layoutY="278.0" mnemonicParsing="false" onAction="#btnSuppliersGroupOnAction" opacity="0.83" prefHeight="41.0" prefWidth="210.0" text="Suppliers" />
+      <Button fx:id="btnWarrantyGroup" layoutY="324.0" mnemonicParsing="false" onAction="#btnWarrantyGroupOnAction" opacity="0.28" prefHeight="41.0" prefWidth="210.0" text="Warranty" />
+      <Button fx:id="btnManageUser" layoutX="374.0" layoutY="180.0" mnemonicParsing="false" onAction="#btnManageUserOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0" text="ManageUser" />
+      <Button fx:id="btnManageCustomer" layoutX="374.0" layoutY="480.0" mnemonicParsing="false" onAction="#btnManageCustomerOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0" text="ManageCustomer" />
+      <Button fx:id="btnManageEmployee" layoutX="374.0" layoutY="328.0" mnemonicParsing="false" onAction="#btnManageEmployeeOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0" text="ManageEmployee" />
+    </children>
+
+</AnchorPane>

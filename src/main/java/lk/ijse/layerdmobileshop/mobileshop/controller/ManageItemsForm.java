@@ -7,11 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
 import lk.ijse.layerdmobileshop.mobileshop.bo.custom.ItemBO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Item;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -226,8 +228,8 @@ public class ManageItemsForm {
     }
 
     @FXML
-    void btnOrderOnAction(ActionEvent event) {
-
+    void btnOrderOnAction(ActionEvent event) throws IOException {
+        App.setRoot("place-order-form");
     }
 
 

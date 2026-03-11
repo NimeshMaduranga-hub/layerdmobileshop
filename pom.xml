@@ -120,7 +120,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                lk.ijse.layerdmobileshop.mobileshop/lk.ijse.layerdmobileshop.mobileshop.HelloApplication
+                                lk.ijse.layerdmobileshop.mobileshop/lk.ijse.layerdmobileshop.mobileshop.App
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

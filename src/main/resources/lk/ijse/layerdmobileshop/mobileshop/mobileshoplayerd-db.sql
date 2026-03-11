@@ -48,3 +48,14 @@ CREATE TABLE `OrderDetails` (
                                 CONSTRAINT `OrderDetails_ibfk_2` FOREIGN KEY (`itemCode`) REFERENCES `Item` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS `User`;
+
+CREATE TABLE `User` (
+                        `username` VARCHAR(50) NOT NULL,
+                        `password` VARCHAR(100) NOT NULL,
+                        `role` VARCHAR(20) NOT NULL,
+                        PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+

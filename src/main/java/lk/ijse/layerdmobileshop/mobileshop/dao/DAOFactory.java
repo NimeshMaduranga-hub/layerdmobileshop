@@ -1,8 +1,6 @@
 package lk.ijse.layerdmobileshop.mobileshop.dao;
 
-import lk.ijse.layerdmobileshop.mobileshop.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.layerdmobileshop.mobileshop.dao.custom.impl.ItemDAOImpl;
-import lk.ijse.layerdmobileshop.mobileshop.dao.custom.impl.OrderDAOImpl;
+import lk.ijse.layerdmobileshop.mobileshop.dao.custom.impl.*;
 
 public class DAOFactory {
 
@@ -21,7 +19,8 @@ public class DAOFactory {
         ITEM,
         ORDER,
         ORDER_DETAILS,
-        QUERY
+        QUERY,
+        USER
     }
 
     public SuperDAO getDAOType(DAOType daoType) {
@@ -33,7 +32,13 @@ public class DAOFactory {
                 return new ItemDAOImpl();
             case ORDER:
                 return new OrderDAOImpl();
+            case ORDER_DETAILS:
+                return new OrderdetailsDAOImpl();
 
+            case QUERY:
+                return new QueryDAOImpl();
+            case USER:
+                return new UserDAOImpl();
             default:
                 return null;
         }

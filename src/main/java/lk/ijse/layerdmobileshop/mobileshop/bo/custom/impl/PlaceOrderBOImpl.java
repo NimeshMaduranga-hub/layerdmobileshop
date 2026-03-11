@@ -51,6 +51,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public boolean saveOrder(OrderDTO orderDTO, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
+
         //return orderDAO.save(orderDTO);
         Connection connection = DBconnection.getdBconnection().getConnection();
 
@@ -105,6 +106,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public boolean saveOrderDetails(OrderDetailDTO detail) throws SQLException, ClassNotFoundException {
+
         OrderDetails orderDetails = new OrderDetails(detail.getOrderId(), detail.getItemCode(), detail.getQty(),detail.getUnitPrice());
         return orderdetailsDAO.save(orderDetails);
     }

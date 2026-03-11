@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.DashboardcontrollerForm">
+
+   <children>
+      <ImageView fitHeight="601.0" fitWidth="800.0">
+         <image>
+            <Image url="@image/MenuUI.png" />
+         </image>
+      </ImageView>
+
+      <Button fx:id="btnUserAndPeople" layoutX="7.0" layoutY="175.0" onAction="#btnUserAndPeopleOnAction" opacity="0.0" prefHeight="36.0" prefWidth="197.0" style="-fx-background-color: CEF2EA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20;" text="User &amp; People" />
+
+      <Button fx:id="btnOrdersAndItems" layoutX="5.0" layoutY="218.0" onAction="#btnOrdersAndItemsOnAction" opacity="0.0" prefHeight="36.0" prefWidth="197.0" style="-fx-background-color: CC44AA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20;" text="Orders &amp; Items" />
+
+      <Button fx:id="btnSuppliersGroup" layoutX="5.0" layoutY="259.0" onAction="#btnSuppliersGroupOnAction" opacity="0.0" prefHeight="36.0" prefWidth="197.0" style="-fx-background-color: CC44AA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20;" text="Suppliers" />
+      <Button fx:id="btnWarrantyGroup" layoutX="5.0" layoutY="300.0" onAction="#btnWarrantyGroupOnAction" opacity="0.0" prefHeight="36.0" prefWidth="197.0" style="-fx-background-color: CC44AA; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 20;" text="Warranty" />
+      <Label fx:id="lblUser" layoutX="111.0" layoutY="67.0" text="Welcome!" />
+      <ImageView fitHeight="480.0" fitWidth="589.0" layoutX="211.0" layoutY="121.0">
+         <image>
+            <Image url="@image/16409343_2007.i211.020_smartphone_mockup_realistic.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="91.0" fitWidth="199.0" layoutX="301.0" layoutY="225.0">
+         <image>
+            <Image url="@image/319498713_109920375298174_110529920404342566_n%202.png" />
+         </image>
+      </ImageView>
+      <ImageView layoutX="605.0" layoutY="389.0">
+         <image>
+            <Image url="@icon/icons8-stich.gif" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="185.0" fitWidth="200.0" layoutX="219.0" layoutY="416.0">
+         <image>
+            <Image url="@icon/image-removebg-preview%20(25).png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnLogout" layoutX="30.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="25.0" prefWidth="80.0" style="-fx-background-color: FF3D1FFF;" text="Logout" textFill="WHITE" />
+
+
+   </children>
+</AnchorPane>

@@ -1,5 +1,6 @@
 package lk.ijse.layerdmobileshop.mobileshop.dao.custom.impl;
 
+import lk.ijse.layerdmobileshop.mobileshop.dao.CRUDUtil;
 import lk.ijse.layerdmobileshop.mobileshop.dao.custom.OrderDetailsDAO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.OrderDetails;
 
@@ -14,12 +15,14 @@ public class OrderdetailsDAOImpl implements OrderDetailsDAO {
     }
 
     @Override
-    public boolean save(OrderDetails enity) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean save(OrderDetails detail) throws SQLException, ClassNotFoundException {
+
+        String sql = "INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)";
+        return CRUDUtil.execute(sql, detail.getOrderId(), detail.getItemCode(), detail.getUnitPrice(), detail.getQty());
     }
 
     @Override
-    public boolean update(OrderDetails entity) throws SQLException, ClassNotFoundException {
+    public boolean update(OrderDetails customerDTO) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -29,17 +32,22 @@ public class OrderdetailsDAOImpl implements OrderDetailsDAO {
     }
 
     @Override
+    public String genarateNewId() throws SQLException, ClassNotFoundException {
+        return "";
+    }
+
+    @Override
     public boolean isExist(String id) throws SQLException, ClassNotFoundException {
         return false;
     }
 
     @Override
-    public OrderDetails find(String id) throws SQLException, ClassNotFoundException {
+    public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public ArrayList<String> getAllId() throws SQLException, ClassNotFoundException {
+    public OrderDetails find(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 }
