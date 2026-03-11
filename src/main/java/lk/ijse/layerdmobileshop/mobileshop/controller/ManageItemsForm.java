@@ -2,10 +2,7 @@ package lk.ijse.layerdmobileshop.mobileshop.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
@@ -43,6 +40,22 @@ public class ManageItemsForm {
 
     @FXML
     private TableView<Item> tblItems;
+    
+    @FXML
+    private Button btnUserAndPeople;
+
+    @FXML
+    private Button btnSuppliers;
+
+    @FXML
+    private Button btnWarranty;
+
+    @FXML
+    private Label lblUser;
+    
+    @FXML
+    private Button btnLogout;
+
 
     @FXML
     private Button btnOrder;
@@ -233,5 +246,15 @@ public class ManageItemsForm {
     }
 
 
+    public void btnUserAndPeopleOnAction(ActionEvent event) {
+    }
 
+    public void btnSuppliersGroupOnAction(ActionEvent event) {
+    }
+
+    public void btnWarrantyGroupOnAction(ActionEvent event) {
+    }
+
+    public void btnLogoutOnAction(ActionEvent event) {
+    }
 }

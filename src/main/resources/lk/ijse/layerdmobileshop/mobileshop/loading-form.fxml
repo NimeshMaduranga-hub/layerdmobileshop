@@ -11,9 +11,14 @@
             <Image url="@image/Frame%205.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="69.0" fitWidth="75.0" layoutX="363.0" layoutY="266.0">
+      <ImageView fitHeight="97.0" fitWidth="107.0" layoutX="347.0" layoutY="252.0">
          <image>
-            <Image url="@icon/Ghost.gif" />
+            <Image url="@icon/Robot%20Futuristic%20Ai%20animated.gif" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="48.0" fitWidth="107.0" layoutX="346.0" layoutY="335.0">
+         <image>
+            <Image url="@icon/icons8-loading-bar.gif" />
          </image>
       </ImageView>
    </children>

@@ -362,17 +362,19 @@ public class PlaceOrderForm {
         App.setRoot("manage-items-form");
     }
 
-    public void btnUserAndPeopleOnAction(ActionEvent event) {
-
+    public void btnUserAndPeopleOnAction(ActionEvent event) throws IOException {
+        App.setRoot("userandpeople-form");
     }
 
-    public void btnSuppliersOnAction(ActionEvent event) {
+    public void btnSuppliersGroupOnAction(ActionEvent event) {
     }
 
-    public void btnWarrantyOnAction(ActionEvent event) {
+    public void btnWarrantyGroupOnAction(ActionEvent event) {
     }
 
     public void btnLogoutOnAction(ActionEvent event) {
 
     }
+
+
 }

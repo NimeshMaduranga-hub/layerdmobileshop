@@ -53,8 +53,8 @@ public class UserandPeopleController {
     }
 
     @FXML
-    void btnOrdersAndItemsOnAction(ActionEvent event) {
-
+    void btnOrdersAndItemsOnAction(ActionEvent event) throws IOException {
+        App.setRoot("place-order-form");
     }
 
     @FXML
