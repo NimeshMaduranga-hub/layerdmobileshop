@@ -246,7 +246,9 @@ public class ManageItemsForm {
     }
 
 
-    public void btnUserAndPeopleOnAction(ActionEvent event) {
+    public void btnUserAndPeopleOnAction(ActionEvent event) throws IOException {
+        App.setRoot("userandpeople-form");
+
     }
 
     public void btnSuppliersGroupOnAction(ActionEvent event) {
@@ -255,6 +257,8 @@ public class ManageItemsForm {
     public void btnWarrantyGroupOnAction(ActionEvent event) {
     }
 
-    public void btnLogoutOnAction(ActionEvent event) {
+    public void btnLogoutOnAction(ActionEvent event) throws IOException {
+        App.setRoot("login-Form");
+
     }
 }

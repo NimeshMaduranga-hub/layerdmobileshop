@@ -43,8 +43,8 @@ public class UserandPeopleController {
     }
 
     @FXML
-    void btnManageEmployeeOnAction(ActionEvent event) {
-
+    void btnManageEmployeeOnAction(ActionEvent event) throws IOException {
+        App.setRoot("employee-view");
     }
 
     @FXML
@@ -73,7 +73,8 @@ public class UserandPeopleController {
     }
 
     @FXML
-    void handleLogout(ActionEvent event) {
+    void handleLogout(ActionEvent event) throws IOException {
+        App.setRoot("login-Form");
 
     }
 

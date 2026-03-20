@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.LoadingFormController"
+            prefWidth="800" prefHeight="600"
+            style="-fx-background-color: FFFFFFFF;"> <!-- body background -->
+
+
+
+    <Canvas fx:id="loadingCanvas"
+            width="400" height="100"
+            layoutX="200" layoutY="250"
+            style="-fx-background-color: #181818; -fx-effect: dropshadow(gaussian, #282828, 1, 0, 0, 0);"/>
+</AnchorPane>

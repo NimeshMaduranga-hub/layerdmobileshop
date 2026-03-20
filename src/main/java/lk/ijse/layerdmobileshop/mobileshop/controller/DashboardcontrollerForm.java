@@ -49,7 +49,8 @@ public class DashboardcontrollerForm {
     }
 
     @FXML
-    void handleLogout(ActionEvent event) {
+    void handleLogout(ActionEvent event) throws IOException {
+        App.setRoot("login-Form");
 
     }
 

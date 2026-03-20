@@ -372,7 +372,8 @@ public class PlaceOrderForm {
     public void btnWarrantyGroupOnAction(ActionEvent event) {
     }
 
-    public void btnLogoutOnAction(ActionEvent event) {
+    public void btnLogoutOnAction(ActionEvent event) throws IOException {
+        App.setRoot("login-Form");
 
     }
 

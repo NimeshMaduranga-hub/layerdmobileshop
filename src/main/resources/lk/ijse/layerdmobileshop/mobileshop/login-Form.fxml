@@ -42,5 +42,10 @@
             <Image url="@icon/icons8-loading-infinity.gif" />
          </image>
       </ImageView>
+      <ImageView fitHeight="108.0" fitWidth="115.0" layoutX="448.0" layoutY="170.0">
+         <image>
+            <Image url="@icon/Robot%20Futuristic%20Ai%20animated.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -20,7 +20,11 @@ public class DAOFactory {
         ORDER,
         ORDER_DETAILS,
         QUERY,
-        USER
+        USER,
+        EMPLOYEE,
+        ATTENDANCE,
+        SALARY
+
     }
 
     public SuperDAO getDAOType(DAOType daoType) {
@@ -39,6 +43,12 @@ public class DAOFactory {
                 return new QueryDAOImpl();
             case USER:
                 return new UserDAOImpl();
+            case EMPLOYEE:
+                return new EmployeeDAOImpl();
+            case ATTENDANCE:
+                return new AttendanceDAOImpl();
+            case SALARY:
+                return new SalaryDAOImpl();
             default:
                 return null;
         }

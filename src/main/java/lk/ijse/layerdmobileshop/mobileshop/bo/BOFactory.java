@@ -1,9 +1,6 @@
 package lk.ijse.layerdmobileshop.mobileshop.bo;
 
-import lk.ijse.layerdmobileshop.mobileshop.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.layerdmobileshop.mobileshop.bo.custom.impl.ItemBOImpl;
-import lk.ijse.layerdmobileshop.mobileshop.bo.custom.impl.LoginBOImpl;
-import lk.ijse.layerdmobileshop.mobileshop.bo.custom.impl.PlaceOrderBOImpl;
+import lk.ijse.layerdmobileshop.mobileshop.bo.custom.impl.*;
 
 public class BOFactory {
     private static BOFactory instance;
@@ -18,7 +15,10 @@ public class BOFactory {
         CUSTOMER,
         ITEM,
         PLACE_ORDER,
-        LOGIN
+        LOGIN,
+        EMPLOYEE,
+        ATTENDANCE,
+        SALARY
     }
     public SuperBO getBo(BOType type){
         switch (type){
@@ -30,6 +30,12 @@ public class BOFactory {
                 return new PlaceOrderBOImpl();
             case LOGIN:
                 return new LoginBOImpl();
+            case EMPLOYEE:
+                return new EmployeeBOImpl();
+            case ATTENDANCE:
+                return new AttendanceBOImpl();
+            case SALARY:
+                return new SalaryBOImpl();
             default:
                 return null;
         }

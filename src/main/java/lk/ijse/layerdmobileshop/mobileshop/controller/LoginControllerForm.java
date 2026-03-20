@@ -35,12 +35,13 @@ public class LoginControllerForm {
 
             User user = loginBO.login(username, password);
 
-
             if (user != null) {
-                new Alert(Alert.AlertType.INFORMATION, "Login Success").show();
-                App.setRoot("loading-form");
 
-                PauseTransition delay = new PauseTransition(Duration.seconds(3));
+
+                App.setRoot("LoadingScreen");
+
+                PauseTransition delay = new PauseTransition(Duration.seconds(5));
+
                 delay.setOnFinished(e -> {
                     try {
                         App.setRoot("dashboard-form");
@@ -48,6 +49,7 @@ public class LoginControllerForm {
                         ex.printStackTrace();
                     }
                 });
+
                 delay.play();
 
             } else {
@@ -58,5 +60,4 @@ public class LoginControllerForm {
             e.printStackTrace();
         }
     }
-
 }

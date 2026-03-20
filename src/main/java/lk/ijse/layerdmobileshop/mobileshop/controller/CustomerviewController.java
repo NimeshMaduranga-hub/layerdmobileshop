@@ -6,11 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
 import lk.ijse.layerdmobileshop.mobileshop.bo.custom.CustomerBO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.CustomerDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Customer;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -214,7 +216,8 @@ public class CustomerviewController {
 
     }
 
-    public void btnManageEmployeeOnAction(ActionEvent event) {
+    public void btnManageEmployeeOnAction(ActionEvent event) throws IOException {
+        App.setRoot("employee-view");
     }
 
     public void btnManageUserOnAction(ActionEvent event) {
@@ -262,5 +265,21 @@ public class CustomerviewController {
         List<Customer> tempCustomersList = new ArrayList<>(tblCustomers.getItems());
         Collections.sort(tempCustomersList);
         return tempCustomersList.get(tempCustomersList.size() - 1).getId();
+    }
+
+    public void handleLogout(ActionEvent event) throws IOException {
+        App.setRoot("login-Form");
+
+    }
+
+    public void btnWarrantyGroupOnAction(ActionEvent event) {
+    }
+
+    public void btnSuppliersGroupOnAction(ActionEvent event) {
+    }
+
+    public void btnOrdersAndItemsOnAction(ActionEvent event) throws IOException {
+        App.setRoot("place-order-form");
+
     }
 }
