@@ -9,40 +9,40 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.LoginControllerForm">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.LoginControllerForm">
    <children>
-      <ImageView fitHeight="600.0" fitWidth="800.0">
+      <ImageView fitHeight="900.0" fitWidth="1440.0">
          <image>
-            <Image url="@image/Untitled%20(12).png" />
+            <Image url="@image/loginUI.png" />
          </image>
       </ImageView>
-      <TextField fx:id="txtUserName" layoutX="236.0" layoutY="300.0" opacity="0.75" prefHeight="40.0" prefWidth="345.0" promptText="Username" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
+      <TextField fx:id="txtUserName" layoutX="568.0" layoutY="380.0" opacity="0.75" prefHeight="40.0" prefWidth="436.0" promptText="Username" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="txtPassword" layoutX="234.0" layoutY="393.0" maxWidth="403.0" opacity="0.75" prefHeight="40.0" prefWidth="345.0" promptText="Password" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
+      <PasswordField fx:id="txtPassword" layoutX="572.0" layoutY="499.0" maxWidth="436.0" opacity="0.75" prefHeight="40.0" prefWidth="436.0" promptText="Password" style="-fx-background-radius: 8; -fx-background-color: #333333; -fx-text-fill: white;">
          <font>
             <Font size="15.0" />
          </font></PasswordField>
-      <Button layoutX="380.0" layoutY="470.0" mnemonicParsing="false" onAction="#btnLoginOnAction" prefHeight="40.0" prefWidth="125.0" style="-fx-background-color: #6B1240; -fx-background-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;" text="LOGIN">
+      <Button layoutX="748.0" layoutY="588.0" mnemonicParsing="false" onAction="#btnLoginOnAction" opacity="0.71" prefHeight="56.0" prefWidth="166.0" style="-fx-background-color: #6B1240; -fx-background-radius: 20; -fx-text-fill: white; -fx-font-weight: bold;" text="Login">
          <font>
-            <Font size="16.0" />
+            <Font size="26.0" />
          </font>
       </Button>
 
 
-      <Hyperlink layoutX="420.0" layoutY="520.0" text="Sign Up" textFill="#fffdb9">
+      <Hyperlink layoutX="746.0" layoutY="660.0" text="Sign Up" textFill="#fffdb9">
          <font>
             <Font size="16.0" />
          </font>
       </Hyperlink>
-      <ImageView>
+      <ImageView fitHeight="69.0" fitWidth="69.0" layoutX="1096.0" layoutY="643.0">
          <image>
             <Image url="@icon/icons8-loading-infinity.gif" />
          </image>
       </ImageView>
-      <ImageView fitHeight="108.0" fitWidth="115.0" layoutX="448.0" layoutY="170.0">
+      <ImageView fitHeight="136.0" fitWidth="147.0" layoutX="945.0" layoutY="207.0">
          <image>
             <Image url="@icon/Robot%20Futuristic%20Ai%20animated.gif" />
          </image>

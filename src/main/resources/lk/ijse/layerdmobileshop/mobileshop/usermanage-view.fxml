@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.UsermanageViewController">
+   <ImageView fitHeight="900.0" fitWidth="1440.0">
+      <image>
+         <Image url="@image/usermanage.png" />
+      </image>
+   </ImageView>
+    <Button fx:id="btnWarrantyGroup" layoutY="415.0" mnemonicParsing="false" onAction="#btnWarrantyGroupOnAction" opacity="0.15" prefHeight="45.0" prefWidth="211.0" />
+    <Button fx:id="btnSuppliersGroup" layoutY="365.0" mnemonicParsing="false" onAction="#btnSuppliersGroupOnAction" opacity="0.15" prefHeight="45.0" prefWidth="211.0" />
+    <Button fx:id="btnOrdersAndItems" layoutY="316.0" mnemonicParsing="false" onAction="#btnOrdersAndItemsOnAction" opacity="0.15" prefHeight="45.0" prefWidth="211.0" />
+    <Button layoutX="625.0" layoutY="121.0" mnemonicParsing="false" onAction="#btnManageEmployeeOnAction" opacity="0.0" prefHeight="25.0" prefWidth="403.0" />
+    <Button fx:id="btnLogout" layoutX="30.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="25.0" prefWidth="80.0" style="-fx-background-color: FF3D1FFF;" text="Logout" textFill="WHITE" />
+    <Button fx:id="btnManageCustomer" layoutX="1028.0" layoutY="122.0" mnemonicParsing="false" onAction="#btnManageCustomerOnAction" opacity="0.0" prefHeight="29.0" prefWidth="410.0" />
+   <ComboBox fx:id="cmbEmployee" layoutX="815.0" layoutY="252.0" onAction="#cmbEmployeeOnAction" prefHeight="29.0" prefWidth="396.0" promptText="SELECT  EMPLOYEE" />
+   <TextField fx:id="txtUsername" layoutX="815.0" layoutY="328.0" prefHeight="23.0" prefWidth="396.0" promptText="Enter Username" />
+   <PasswordField fx:id="txtPassword" layoutX="815.0" layoutY="388.0" prefHeight="23.0" prefWidth="396.0" promptText="Enter Password" />
+   <Button layoutX="998.0" layoutY="440.0" mnemonicParsing="false" onAction="#btnSaveUserOnAction" prefHeight="22.0" prefWidth="103.0" text="Save User" />
+   <TableView fx:id="tblUsers" layoutX="315.0" layoutY="512.0" prefHeight="182.0" prefWidth="917.0"  onMouseClicked="#tblUsersOnMouseClicked">
+     <columns>
+       <TableColumn fx:id="colUsername" prefWidth="267.0" text="Username" />
+         <TableColumn fx:id="colRole" prefWidth="206.0" text="Role" />
+       <TableColumn fx:id="colEmpid" prefWidth="443.0" text="EmpId" />
+     </columns>
+   </TableView>
+   <Button layoutX="1115.0" layoutY="440.0" mnemonicParsing="false" onAction="#btnCancelOnAction" prefHeight="22.0" prefWidth="103.0" text="Cancel" />
+
+</AnchorPane>

@@ -17,33 +17,72 @@ public class ItemDAOImpl implements ItemDAO {
 
         ArrayList<Item> itemList = new ArrayList<>();
 
-        while(rst.next()){
+        while (rst.next()) {
 
-            String id = rst.getString("code");
-            String description = rst.getString("description");
-            BigDecimal price = rst.getBigDecimal("unitPrice");
-            int qtyOnHand = rst.getInt("qtyOnHand");
+            java.sql.Date sqlDate = rst.getDate("receivedDate");
+            java.time.LocalDate receivedDate =
+                    (sqlDate != null) ? sqlDate.toLocalDate() : null;
 
-            Item itemTM = new Item(id, description, price, qtyOnHand);
-            itemList.add(itemTM);
+            Item item = new Item(
+                    rst.getString("code"),
+                    rst.getString("description"),
+                    receivedDate,
+                    rst.getInt("qtyOnHand"),
+                    rst.getBigDecimal("unitPrice"),
+                    rst.getString("storage"),
+                    rst.getString("color"),
+                    rst.getString("emiNo"),
+                    rst.getString("warranty")
+            );
+
+            itemList.add(item);
         }
 
         return itemList;
-
     }
+
 
     @Override
     public boolean save(Item item) throws SQLException, ClassNotFoundException {
 
-        String sql = "INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)";
-        return CRUDUtil.execute(sql ,item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand());
+        String sql = "INSERT INTO Item (code, description, receivedDate, qtyOnHand, unitPrice, storage, color, emiNo, warranty) VALUES (?,?,?,?,?,?,?,?,?)";
+
+        return CRUDUtil.execute(sql,
+                item.getCode(),
+                item.getDescription(),
+                item.getReceivedDate() != null
+                        ? java.sql.Date.valueOf(item.getReceivedDate())
+                        : null,                item.getQtyOnHand(),
+                item.getUnitPrice(),
+                item.getStorage(),
+                item.getColor(),
+                item.getEmiNo(),
+                item.getWarranty()
+        );
+    }
+    @Override
+    public boolean updateQty(String code, int qty) throws SQLException, ClassNotFoundException {
+
+        String sql = "UPDATE Item SET qtyOnHand = qtyOnHand - ? WHERE code = ?";
+        return CRUDUtil.execute(sql, qty, code);
     }
 
     @Override
     public boolean update(Item item) throws SQLException, ClassNotFoundException {
 
-        String sql = "UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?";
-        return CRUDUtil.execute(sql, item.getDescription(), item.getUnitPrice(), item.getQtyOnHand(), item.getCode());
+        String sql = "UPDATE Item SET description=?, receivedDate=?, qtyOnHand=?, unitPrice=?, storage=?, color=?, emiNo=?, warranty=? WHERE code=?";
+
+        return CRUDUtil.execute(sql,
+                item.getDescription(),
+                item.getReceivedDate(),
+                item.getQtyOnHand(),
+                item.getUnitPrice(),
+                item.getStorage(),
+                item.getColor(),
+                item.getEmiNo(),
+                item.getWarranty(),
+                item.getCode()
+        );
     }
 
     @Override
@@ -94,7 +133,25 @@ public class ItemDAOImpl implements ItemDAO {
     public Item find(String code) throws SQLException, ClassNotFoundException {
 
         ResultSet rst = CRUDUtil.execute("SELECT * FROM Item WHERE code=?", code);
-        rst.next();
-        return new Item(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+
+        if (rst.next()) {
+
+            java.sql.Date sqlDate = rst.getDate("receivedDate");
+            java.time.LocalDate receivedDate =
+                    (sqlDate != null) ? sqlDate.toLocalDate() : null;
+
+            return new Item(
+                    rst.getString("code"),
+                    rst.getString("description"),
+                    receivedDate,
+                    rst.getInt("qtyOnHand"),
+                    rst.getBigDecimal("unitPrice"),
+                    rst.getString("storage"),
+                    rst.getString("color"),
+                    rst.getString("emiNo"),
+                    rst.getString("warranty")
+            );
+        }
+        return null;
     }
 }

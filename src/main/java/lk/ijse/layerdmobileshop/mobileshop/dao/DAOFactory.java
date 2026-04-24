@@ -38,7 +38,6 @@ public class DAOFactory {
                 return new OrderDAOImpl();
             case ORDER_DETAILS:
                 return new OrderdetailsDAOImpl();
-
             case QUERY:
                 return new QueryDAOImpl();
             case USER:

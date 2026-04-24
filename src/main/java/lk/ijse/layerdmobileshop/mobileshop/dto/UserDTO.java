@@ -2,24 +2,24 @@ package lk.ijse.layerdmobileshop.mobileshop.dto;
 
 public class UserDTO {
 
-    private String id;
+    private String empId;
     private String username;
     private String password;
     private String role;
 
     public UserDTO(String id, String username, String password, String role) {
-        this.id = id;
+        this.empId = id;
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
     public String getId() {
-        return id;
+        return empId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.empId = id;
     }
 
     public String getUsername() {
@@ -49,7 +49,7 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id='" + id + '\'' +
+                "id='" + empId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +

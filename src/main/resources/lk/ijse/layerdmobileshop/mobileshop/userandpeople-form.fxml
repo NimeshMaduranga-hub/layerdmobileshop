@@ -1,53 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="644.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.UserandPeopleController">
+<AnchorPane prefHeight="900.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.layerdmobileshop.mobileshop.controller.UserandPeopleController">
 
     <children>
-        <ImageView fitHeight="644.0" fitWidth="800.0">
+        <ImageView fitHeight="900.0" fitWidth="1440.0" style="-fx-cursor: #2E7D32;;">
             <image>
-                <Image url="@image/userandpeople.png"/>
-            </image>
-        </ImageView>
-        <Label fx:id="lblUser" layoutX="110.0" layoutY="70.0" prefHeight="20.0" prefWidth="126.0"/>
-        <Button fx:id="btnUserAndPeople" layoutY="172.0" mnemonicParsing="false" onAction="#btnUserAndPeopleOnAction"
-                opacity="0.0" prefHeight="41.0" prefWidth="210.0" text="UserAndPeople"/>
-        <Button fx:id="btnOrdersAndItems" layoutY="232.0" mnemonicParsing="false" onAction="#btnOrdersAndItemsOnAction"
-                opacity="0.15" prefHeight="41.0" prefWidth="210.0"/>
-        <Button fx:id="btnSuppliersGroup" layoutY="279.0" mnemonicParsing="false" onAction="#btnSuppliersGroupOnAction"
-                opacity="0.15" prefHeight="41.0" prefWidth="210.0"/>
-        <Button fx:id="btnWarrantyGroup" layoutY="325.0" mnemonicParsing="false" onAction="#btnWarrantyGroupOnAction"
-                opacity="0.15" prefHeight="41.0" prefWidth="210.0"/>
-        <Button fx:id="btnManageUser" layoutX="245.0" layoutY="155.0" mnemonicParsing="false"
-                onAction="#btnManageUserOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0" text="ManageUser"/>
-        <Button fx:id="btnManageCustomer" layoutX="245.0" layoutY="459.0" mnemonicParsing="false"
-                onAction="#btnManageCustomerOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0"
-                text="ManageCustomer"/>
-        <Button fx:id="btnManageEmployee" layoutX="245.0" layoutY="306.0" mnemonicParsing="false"
-                onAction="#btnManageEmployeeOnAction" opacity="0.0" prefHeight="116.0" prefWidth="240.0"
-                text="ManageEmployee"/>
-        <Button fx:id="btnLogout" layoutX="30.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleLogout"
-                prefHeight="25.0" prefWidth="80.0" style="-fx-background-color: FF3D1FFF;" text="Logout"
-                textFill="WHITE"/>
-
-        <ImageView layoutX="600.0" layoutY="287.0">
-            <image>
-                <Image url="@icon/Infinity.gif"/>
-            </image>
-        </ImageView>
-        <ImageView layoutX="589.0" layoutY="174.0">
-            <image>
-                <Image url="@icon/AI%20Tools.gif"/>
+                <Image url="@image/userandpeople.png" />
             </image>
         </ImageView>
 
+        <Canvas fx:id="dashbordCanvas" height="774.0" layoutX="210.0" layoutY="121.0" opacity="0.43" width="1228.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="210.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="121.0" />
+        <Label fx:id="lblUser" layoutX="110.0" layoutY="70.0" prefHeight="20.0" prefWidth="126.0" />
+        <Button fx:id="btnUserAndPeople" layoutY="172.0" mnemonicParsing="false" onAction="#btnUserAndPeopleOnAction" opacity="0.0" prefHeight="41.0" prefWidth="210.0" text="UserAndPeople" />
+        <Button fx:id="btnOrdersAndItems" layoutY="318.0" mnemonicParsing="false" onAction="#btnOrdersAndItemsOnAction" opacity="0.15" prefHeight="41.0" prefWidth="210.0" />
+        <Button fx:id="btnSuppliersGroup" layoutY="368.0" mnemonicParsing="false" onAction="#btnSuppliersGroupOnAction" opacity="0.15" prefHeight="41.0" prefWidth="210.0" />
+        <Button fx:id="btnWarrantyGroup" layoutY="417.0" mnemonicParsing="false" onAction="#btnWarrantyGroupOnAction" opacity="0.15" prefHeight="41.0" prefWidth="210.0" />
+        <Button fx:id="btnManageUser" layoutX="300.0" layoutY="311.0" mnemonicParsing="false" onAction="#btnManageUserOnAction" prefHeight="116.0" prefWidth="284.0" style="-fx-background-color: purple; -fx-border-radius: 200;" text="ManageUser" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Button>
+        <Button fx:id="btnManageCustomer" layoutX="950.0" layoutY="311.0" mnemonicParsing="false" onAction="#btnManageCustomerOnAction" prefHeight="116.0" prefWidth="284.0" style="-fx-background-color: red;" text="ManageCustomer" textFill="WHITE">
+         <font>
+            <Font size="25.0" />
+         </font></Button>
+        <Button fx:id="btnManageEmployee" layoutX="630.0" layoutY="311.0" mnemonicParsing="false" onAction="#btnManageEmployeeOnAction" prefHeight="116.0" prefWidth="284.0" style="-fx-background-color: green;" text="ManageEmployee" textFill="#ebebeb">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Button>
+        <Button fx:id="btnLogout" layoutX="30.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="25.0" prefWidth="80.0" style="-fx-background-color: FF3D1FFF;" text="Logout" textFill="WHITE" />
+      <ImageView fitHeight="178.0" fitWidth="450.0" layoutX="560.0" layoutY="500.0">
+         <image>
+            <Image url="@image/Artboard%202.png" />
+         </image>
+      </ImageView>
     </children>
 
 </AnchorPane>

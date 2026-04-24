@@ -21,21 +21,48 @@ public class ItemBOImpl implements ItemBO {
         ArrayList<ItemDTO> itemDtoList = new ArrayList<>();
 
         for(Item i : items){
-            itemDtoList.add(new ItemDTO(i.getCode(),i.getDescription(), i.getUnitPrice(), i.getQtyOnHand()));
-        }
+            itemDtoList.add(new ItemDTO(
+                    i.getCode(),
+                    i.getDescription(),
+                    i.getReceivedDate(),
+                    i.getQtyOnHand(),
+                    i.getUnitPrice(),
+                    i.getStorage(),
+                    i.getColor(),
+                    i.getEmiNo(),
+                    i.getWarranty()
+            ));        }
         return itemDtoList;
     }
 
     @Override
     public boolean saveItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        Item item = new Item(itemDTO.getCode(),itemDTO.getDescription(), itemDTO.getUnitPrice(), itemDTO.getQtyOnHand());
-        return itemDAO.save(item);
+        Item item = new Item(
+                itemDTO.getCode(),
+                itemDTO.getDescription(),
+                itemDTO.getReceivedDate(),
+                itemDTO.getQtyOnHand(),
+                itemDTO.getUnitPrice(),
+                itemDTO.getStorage(),
+                itemDTO.getColor(),
+                itemDTO.getEmiNo(),
+                itemDTO.getWarranty()
+        );        return itemDAO.save(item);
     }
 
     @Override
     public boolean updateItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        Item item = new Item(itemDTO.getCode(),itemDTO.getDescription(), itemDTO.getUnitPrice(), itemDTO.getQtyOnHand());
-        return itemDAO.update(item);
+        Item item = new Item(
+                itemDTO.getCode(),
+                itemDTO.getDescription(),
+                itemDTO.getReceivedDate(),
+                itemDTO.getQtyOnHand(),
+                itemDTO.getUnitPrice(),
+                itemDTO.getStorage(),
+                itemDTO.getColor(),
+                itemDTO.getEmiNo(),
+                itemDTO.getWarranty()
+        );        return itemDAO.update(item);
     }
 
     @Override

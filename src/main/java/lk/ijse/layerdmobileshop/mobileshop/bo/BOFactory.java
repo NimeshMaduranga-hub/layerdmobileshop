@@ -18,7 +18,8 @@ public class BOFactory {
         LOGIN,
         EMPLOYEE,
         ATTENDANCE,
-        SALARY
+        SALARY,
+        USER
     }
     public SuperBO getBo(BOType type){
         switch (type){
@@ -29,13 +30,15 @@ public class BOFactory {
             case PLACE_ORDER:
                 return new PlaceOrderBOImpl();
             case LOGIN:
-                return new LoginBOImpl();
+                return new UserBOImpl();
             case EMPLOYEE:
                 return new EmployeeBOImpl();
             case ATTENDANCE:
                 return new AttendanceBOImpl();
             case SALARY:
                 return new SalaryBOImpl();
+            case USER:
+                return new UserBOImpl();
             default:
                 return null;
         }

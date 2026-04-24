@@ -7,6 +7,7 @@ module lk.ijse.layerdmobileshop.mobileshop {
     requires static lombok;
     requires jakarta.persistence;
     requires com.jfoenix;
+    requires jasperreports;
 
     opens lk.ijse.layerdmobileshop.mobileshop to javafx.fxml;
     opens lk.ijse.layerdmobileshop.mobileshop.dto to javafx.base;

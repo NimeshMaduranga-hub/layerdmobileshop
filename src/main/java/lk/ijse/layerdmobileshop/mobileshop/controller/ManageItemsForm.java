@@ -1,5 +1,6 @@
 package lk.ijse.layerdmobileshop.mobileshop.controller;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -40,7 +41,7 @@ public class ManageItemsForm {
 
     @FXML
     private TableView<Item> tblItems;
-    
+
     @FXML
     private Button btnUserAndPeople;
 
@@ -52,9 +53,24 @@ public class ManageItemsForm {
 
     @FXML
     private Label lblUser;
-    
+
     @FXML
     private Button btnLogout;
+
+    @FXML
+    private TextField txtEmi;
+
+    @FXML
+    private TextField txtColor;
+
+    @FXML
+    private TextField txtStorage;
+
+    @FXML
+    private DatePicker colReceivedDate;
+
+    @FXML
+    private ComboBox<String> cmbWarranty;
 
 
     @FXML
@@ -65,10 +81,18 @@ public class ManageItemsForm {
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblItems.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
-        tblItems.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
-        tblItems.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        tblItems.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("receivedDate"));
+        tblItems.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("qtyOnHand"));
+        tblItems.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        tblItems.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("storage"));
+        tblItems.getColumns().get(6).setCellValueFactory(new PropertyValueFactory<>("color"));
+        tblItems.getColumns().get(7).setCellValueFactory(new PropertyValueFactory<>("emiNo"));
+        tblItems.getColumns().get(8).setCellValueFactory(new PropertyValueFactory<>("warranty"));
 
         initUI();
+        cmbWarranty.setItems(FXCollections.observableArrayList(
+                "No Warranty ","one month","3 months","6 months", "one year", "two years", "Lifetime"
+        ));
 
         tblItems.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             btnDelete.setDisable(newValue == null);
@@ -81,6 +105,11 @@ public class ManageItemsForm {
                 txtUnitPrice.setText(newValue.getUnitPrice().setScale(2).toString());
                 txtQtyOnHand.setText(newValue.getQtyOnHand() + "");
 
+                cmbWarranty.setDisable(false);
+                txtEmi.setDisable(false);
+                txtColor.setDisable(false);
+                txtStorage.setDisable(false);
+                colReceivedDate.setDisable(false);
                 txtCode.setDisable(false);
                 txtDescription.setDisable(false);
                 txtUnitPrice.setDisable(false);
@@ -94,16 +123,27 @@ public class ManageItemsForm {
 
     private void loadAllItems() {
         tblItems.getItems().clear();
+
         try {
             ArrayList<ItemDTO> itemList = itemBO.getAllItems();
 
-            for(ItemDTO itemDTO : itemList) {
-                tblItems.getItems().add(new Item(itemDTO.getCode(), itemDTO.getDescription(), itemDTO.getUnitPrice(), itemDTO.getQtyOnHand()));
+            for (ItemDTO i : itemList) {
+
+                tblItems.getItems().add(new Item(
+                        i.getCode(),
+                        i.getDescription(),
+                        i.getReceivedDate(),
+                        i.getQtyOnHand(),
+                        i.getUnitPrice(),
+                        i.getStorage(),
+                        i.getColor(),
+                        i.getEmiNo(),
+                        i.getWarranty()
+                ));
             }
-        } catch (SQLException e) {
+
+        } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
@@ -116,6 +156,11 @@ public class ManageItemsForm {
         txtDescription.setDisable(true);
         txtUnitPrice.setDisable(true);
         txtQtyOnHand.setDisable(true);
+        cmbWarranty.setDisable(true);
+        txtEmi.setDisable(true);
+        txtColor.setDisable(true);
+        txtStorage.setDisable(true);
+        colReceivedDate.setDisable(true);
         txtCode.setEditable(false);
         btnSave.setDisable(true);
         btnDelete.setDisable(true);
@@ -127,6 +172,11 @@ public class ManageItemsForm {
         txtDescription.setDisable(false);
         txtUnitPrice.setDisable(false);
         txtQtyOnHand.setDisable(false);
+        cmbWarranty.setDisable(false);
+        txtEmi.setDisable(false);
+        txtColor.setDisable(false);
+        txtStorage.setDisable(false);
+        colReceivedDate.setDisable(false);
         txtCode.clear();
         txtCode.setText(generateNewId());
         txtDescription.clear();
@@ -159,9 +209,15 @@ public class ManageItemsForm {
         }
     }
 
-    public void btnSave_OnAction(ActionEvent actionEvent) {
+/*    public void btnSave_OnAction(ActionEvent actionEvent) {
         String code = txtCode.getText();
         String description = txtDescription.getText();
+        String storage = txtStorage.getText().isEmpty() ? null : txtStorage.getText();
+        String color = txtColor.getText().isEmpty() ? null : txtColor.getText();
+        String emiNo = txtEmi.getText().isEmpty() ? null : txtEmi.getText();
+        String warranty = cmbWarranty.getValue();
+        java.time.LocalDate receivedDate = colReceivedDate.getValue();
+
 
         if (!description.matches("[A-Za-z0-9 ]+")) {
             new Alert(Alert.AlertType.ERROR, "Invalid description").show();
@@ -187,10 +243,34 @@ public class ManageItemsForm {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
+                itemBO.saveItem(new ItemDTO(
+                        code,
+                        description,
+                        receivedDate,
+                        qtyOnHand,
+                        unitPrice,
+                        storage,
+                        color,
+                        emiNo,
+                        warranty
+                ));
 
-                itemBO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                loadAllItems();
+                initUI();
 
-                tblItems.getItems().add(new Item(code, description, unitPrice, qtyOnHand));
+                tblItems.getItems().add(new Item(
+                        code,
+                        description,
+                        receivedDate,
+                        Integer.parseInt(txtQtyOnHand.getText()),
+                        new BigDecimal(txtUnitPrice.getText()),
+                        storage,
+                        color,
+                        txtEmi.getText().isEmpty() ? null : txtEmi.getText(),
+                        warranty
+                ));
+
+
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -203,9 +283,22 @@ public class ManageItemsForm {
                 if (!existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
-                /*Update Item*/
+                *//*Update Item*//*
 
-                itemBO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
+                itemBO.updateItem(new ItemDTO(
+                        code,
+                        description,
+                        receivedDate,
+                        qtyOnHand,
+                        unitPrice,
+                        storage,
+                        color,
+                        emiNo,
+                        warranty
+                ));
+
+                loadAllItems();
+                initUI();
 
                 Item selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);
@@ -219,6 +312,116 @@ public class ManageItemsForm {
             }
         }
 
+        btnAddNewItem.fire();
+    }
+    */
+
+    public void btnSave_OnAction(ActionEvent actionEvent) {
+
+        String code = txtCode.getText();
+        String description = txtDescription.getText();
+        String storage = txtStorage.getText().isEmpty() ? "N/A" : txtStorage.getText();
+        String color = txtColor.getText().isEmpty() ? "N/A" : txtColor.getText();
+        String emiNo = txtEmi.getText().isEmpty() ? "N/A" : txtEmi.getText();
+        String warranty = cmbWarranty.getValue() == null ? "No Warranty" : cmbWarranty.getValue();
+        java.time.LocalDate receivedDate = colReceivedDate.getValue();
+
+        // =========================
+        // 🔴 VALIDATION SECTION
+        // =========================
+
+        if (code == null || code.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Item Code cannot be empty").show();
+            txtCode.requestFocus();
+            return;
+        }
+
+        if (description == null || !description.matches("[A-Za-z0-9 ]+")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid description").show();
+            txtDescription.requestFocus();
+            return;
+        }
+
+        if (txtUnitPrice.getText() == null || txtUnitPrice.getText().isEmpty()
+                || !txtUnitPrice.getText().matches("^[0-9]+(\\.[0-9]+)?$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid unit price").show();
+            txtUnitPrice.requestFocus();
+            return;
+        }
+
+        if (txtQtyOnHand.getText() == null || txtQtyOnHand.getText().isEmpty()
+                || !txtQtyOnHand.getText().matches("^\\d+$")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid qty on hand").show();
+            txtQtyOnHand.requestFocus();
+            return;
+        }
+
+        if (receivedDate == null) {
+            new Alert(Alert.AlertType.ERROR, "Please select received date").show();
+            colReceivedDate.requestFocus();
+            return;
+        }
+
+        // =========================
+        // 🔵 SAFE PARSING SECTION
+        // =========================
+
+        int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
+        BigDecimal unitPrice = new BigDecimal(txtUnitPrice.getText()).setScale(2);
+
+        ItemDTO itemDTO = new ItemDTO(
+                code,
+                description,
+                receivedDate,
+                qtyOnHand,
+                unitPrice,
+                storage,
+                color,
+                emiNo,
+                warranty
+        );
+
+        // =========================
+        // 🟢 SAVE OR UPDATE
+        // =========================
+
+        try {
+
+            if (btnSave.getText().equalsIgnoreCase("save")) {
+
+                if (existItem(code)) {
+                    new Alert(Alert.AlertType.ERROR, "Item already exists: " + code).show();
+                    return;
+                }
+
+                itemBO.saveItem(itemDTO);
+
+                new Alert(Alert.AlertType.INFORMATION, "Item Saved Successfully").show();
+
+            } else {
+
+                if (!existItem(code)) {
+                    new Alert(Alert.AlertType.ERROR, "Item not found: " + code).show();
+                    return;
+                }
+
+                itemBO.updateItem(itemDTO);
+
+                new Alert(Alert.AlertType.INFORMATION, "Item Updated Successfully").show();
+            }
+
+            // =========================
+            // 🔄 REFRESH UI
+            // =========================
+
+            loadAllItems();
+            initUI();
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Database Error: " + e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         btnAddNewItem.fire();
     }
 
@@ -258,7 +461,11 @@ public class ManageItemsForm {
     }
 
     public void btnLogoutOnAction(ActionEvent event) throws IOException {
-        App.setRoot("login-Form");
+
+
+    }
+
+    public void printStockReport(ActionEvent event) {
 
     }
 }

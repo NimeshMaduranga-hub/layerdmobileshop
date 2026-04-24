@@ -1,0 +1,153 @@
+<!-- Created with Jaspersoft Studio version 7.0.0.final using JasperReports Library version 7.0.0-b478feaa9aab4375eba71de77b4ca138ad2f62aa  -->
+<jasperReport name="sStockReport" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b7203203-c38a-4910-8211-0a6b565ed4ce">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Pasimobile"/>
+	<query language="SQL"><![CDATA[SELECT*FROM item]]></query>
+	<field name="code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="code"/>
+		<property name="com.jaspersoft.studio.field.label" value="code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="description"/>
+		<property name="com.jaspersoft.studio.field.label" value="description"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="receivedDate" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="receivedDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="receivedDate"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="qtyOnHand" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qtyOnHand"/>
+		<property name="com.jaspersoft.studio.field.label" value="qtyOnHand"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="unitPrice" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="unitPrice"/>
+		<property name="com.jaspersoft.studio.field.label" value="unitPrice"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="storage" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="storage"/>
+		<property name="com.jaspersoft.studio.field.label" value="storage"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="color" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="color"/>
+		<property name="com.jaspersoft.studio.field.label" value="color"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="emiNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="emiNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="emiNo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<field name="warranty" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="warranty"/>
+		<property name="com.jaspersoft.studio.field.label" value="warranty"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="item"/>
+	</field>
+	<background splitType="Stretch"/>
+	<title height="90" splitType="Stretch">
+		<element kind="staticText" uuid="497ffa79-0fea-4ee1-9a63-7639cc2f563c" x="160" y="19" width="240" height="50" forecolor="#F7830F" fontSize="29.0" bold="true">
+			<text><![CDATA[STOCK REPORT]]></text>
+		</element>
+		<element kind="line" uuid="8567d7d6-5741-4930-8649-caf296915da7" x="-20" y="80" width="595" height="2" forecolor="#F0751D">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</title>
+	<pageHeader height="101" splitType="Stretch">
+		<element kind="staticText" uuid="e2bd537f-c6bd-4997-8999-8849a7eb26c5" x="180" y="12" width="190" height="55" forecolor="#523108">
+			<text><![CDATA[PASI MOBILE (PVT) LTD
+Address: Kalugamuwa-Wariyapola Rd, Wariyapola
+Tel: 077 475 7669]]></text>
+		</element>
+		<element kind="image" uuid="d20d76f8-034b-421f-9b37-bce3fec040d2" x="-1" y="-1" width="170" height="76">
+			<expression><![CDATA["C:/Users/Quickcuttube/Music/319498713_109920375298174_110529920404342566_n 2.png"]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader height="48" splitType="Stretch">
+		<element kind="staticText" uuid="b265a015-a0a4-403b-9413-9ab16e5b5a04" x="-13" y="21" width="37" height="20">
+			<text><![CDATA[Code]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="47ae3b76-7bc6-4fc2-8bfc-684c60937541" x="33" y="21" width="70" height="19">
+			<text><![CDATA[Description]]></text>
+		</element>
+		<element kind="staticText" uuid="e1250d0f-e20c-45e8-9a8b-b5bae1dc2be7" x="108" y="21" width="70" height="20">
+			<text><![CDATA[Received Date]]></text>
+		</element>
+		<element kind="staticText" uuid="ea9e9bc2-2a32-43e1-8489-f4ba3834969a" x="190" y="21" width="36" height="20">
+			<text><![CDATA[Qty ]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="5f7aad1b-02db-493c-9485-fdf818fdd19e" x="235" y="21" width="60" height="20">
+			<text><![CDATA[Unit Price]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="5d97156d-6b28-45a4-85ae-c979a28af3be" x="302" y="21" width="38" height="20">
+			<text><![CDATA[Storage]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="b049df3a-6a8d-40b0-8fce-10bb46c9eb9f" x="369" y="21" width="40" height="20">
+			<text><![CDATA[Color]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="c0dd55f2-ec53-4060-88a0-24cb498ffd04" x="434" y="21" width="41" height="20">
+			<text><![CDATA[EmiNo]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="staticText" uuid="2a93c6a9-9d54-40f9-86b7-bb88c0180360" x="513" y="21" width="41" height="20">
+			<text><![CDATA[Warrenty]]></text>
+			<property name="com.jaspersoft.studio.unit.y" value="px"/>
+		</element>
+		<element kind="line" uuid="b7c76f58-0ba5-4ef2-bd48-0ab77d095f57" x="-20" y="0" width="595" height="1" forecolor="#52504E">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="line" uuid="39b2a96e-a637-4e5f-9c94-1c0162906a89" x="-20" y="41" width="595" height="1" forecolor="#52504E">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<element kind="textField" uuid="76e8e3a1-17f5-4e81-93ae-4550d960336d" x="-14" y="0" width="46" height="20">
+				<expression><![CDATA[$F{code}]]></expression>
+			</element>
+			<element kind="textField" uuid="c49dbc88-a71b-43ff-96f7-74d19e194425" x="35" y="0" width="70" height="20">
+				<expression><![CDATA[$F{description}]]></expression>
+			</element>
+			<element kind="textField" uuid="d317b580-fe3c-462c-92b1-767848340bea" x="109" y="0" width="70" height="20">
+				<expression><![CDATA[$F{receivedDate}]]></expression>
+			</element>
+			<element kind="textField" uuid="bf4f0294-353d-4e47-8c99-dc99b0803617" x="188" y="0" width="38" height="20">
+				<expression><![CDATA[$F{qtyOnHand}]]></expression>
+			</element>
+			<element kind="textField" uuid="9b511473-c812-48f9-82bb-6e7bbb9b0bd9" x="236" y="0" width="60" height="20">
+				<expression><![CDATA[$F{unitPrice}]]></expression>
+			</element>
+			<element kind="textField" uuid="4be43870-7de4-4268-80f6-d06c16e73ffb" x="302" y="0" width="58" height="20">
+				<expression><![CDATA[$F{storage}]]></expression>
+			</element>
+			<element kind="textField" uuid="d11b9b7c-134e-4d45-9a69-a15d60a71a7f" x="367" y="0" width="56" height="20">
+				<expression><![CDATA[$F{color}]]></expression>
+			</element>
+			<element kind="textField" uuid="c70a7691-1e17-4506-a679-d19a6290898d" x="425" y="0" width="85" height="20">
+				<expression><![CDATA[$F{emiNo}]]></expression>
+			</element>
+			<element kind="textField" uuid="c5831237-e0f0-40be-ba3e-0527aedce2ef" x="514" y="0" width="55" height="20">
+				<expression><![CDATA[$F{warranty}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<columnFooter height="2" splitType="Stretch"/>
+	<pageFooter height="46" splitType="Stretch">
+		<element kind="staticText" uuid="16416012-94fb-48bc-b11f-580fb100512a" x="240" y="0" width="70" height="20">
+			<text><![CDATA[© Pasi Mobile ]]></text>
+		</element>
+		<element kind="staticText" uuid="292d3387-0f5f-46c6-b639-3ef9da49b5d9" x="208" y="20" width="144" height="20">
+			<text><![CDATA[Mobile Shop Stock Report]]></text>
+		</element>
+	</pageFooter>
+	<summary splitType="Stretch"/>
+</jasperReport>

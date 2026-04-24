@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -16,11 +17,19 @@ import lk.ijse.layerdmobileshop.mobileshop.dto.OrderDTO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.OrderDetailDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.OrderDetails;
 
+import lk.ijse.layerdmobileshop.mobileshop.db.DBconnection;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.JasperViewer;
+import java.sql.Connection;
+import java.util.HashMap;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,18 +51,33 @@ public class PlaceOrderForm {
     public Label lblDate;
     public Label lblTotal;
     private String orderId;
+    private BigDecimal orderTotal = BigDecimal.ZERO;
+
+    @FXML private TableColumn<OrderDetails, String> colItemCode;
+    @FXML private TableColumn<OrderDetails, String> colDescription;
+    @FXML private TableColumn<OrderDetails, Integer> colQty;
+    @FXML private TableColumn<OrderDetails, BigDecimal> colUnitPrice;
+    @FXML private TableColumn<OrderDetails, String> colStorage;
+    @FXML private TableColumn<OrderDetails, String> colColor;
+    @FXML private TableColumn<OrderDetails, String> colEmiNo;
+    @FXML private TableColumn<OrderDetails, String> colWarranty;
+    @FXML private TableColumn<OrderDetails, BigDecimal> colTotal;
 
     //  Dependency injection
     PlaceOrderBO orderBO = (PlaceOrderBO) BOFactory.getInstance().getBo(BOFactory.BOType.PLACE_ORDER);
 
     public void initialize() throws SQLException, ClassNotFoundException  {
 
-        tblOrderDetails.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
-        tblOrderDetails.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
-        tblOrderDetails.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("qty"));
-        tblOrderDetails.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        tblOrderDetails.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("total"));
-        TableColumn<OrderDetails, Button> lastCol = (TableColumn<OrderDetails, Button>) tblOrderDetails.getColumns().get(5);
+        colItemCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
+        colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colStorage.setCellValueFactory(new PropertyValueFactory<>("storage"));
+        colColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+        colEmiNo.setCellValueFactory(new PropertyValueFactory<>("emiNo"));
+        colWarranty.setCellValueFactory(new PropertyValueFactory<>("warranty"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        TableColumn<OrderDetails, Button> lastCol = (TableColumn<OrderDetails, Button>) tblOrderDetails.getColumns().get(9);
 
         lastCol.setCellValueFactory(param -> {
             Button btnDelete = new Button("Delete");
@@ -130,7 +154,7 @@ public class PlaceOrderForm {
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
 
 //                    txtQtyOnHand.setText(tblOrderDetails.getItems().stream().filter(detail-> detail.getCode().equals(item.getCode())).<Integer>map(detail-> item.getQtyOnHand() - detail.getQty()).findFirst().orElse(item.getQtyOnHand()) + "");
-                    Optional<OrderDetails> optOrderDetail = tblOrderDetails.getItems().stream().filter(detail -> detail.getCode().equals(newItemCode)).findFirst();
+                    Optional<OrderDetails> optOrderDetail = tblOrderDetails.getItems().stream().filter(detail -> detail.getItemCode().equals(newItemCode)).findFirst();
                     txtQtyOnHand.setText((optOrderDetail.isPresent() ? item.getQtyOnHand() - optOrderDetail.get().getQty() : item.getQtyOnHand()) + "");
 
                 } catch (SQLException throwables) {
@@ -151,7 +175,7 @@ public class PlaceOrderForm {
 
             if (selectedOrderDetail != null) {
                 cmbItemCode.setDisable(true);
-                cmbItemCode.setValue(selectedOrderDetail.getCode());
+                cmbItemCode.setValue(selectedOrderDetail.getItemCode());
                 btnSave.setText("Update");
                 txtQtyOnHand.setText(Integer.parseInt(txtQtyOnHand.getText()) + selectedOrderDetail.getQty() + "");
                 txtQty.setText(selectedOrderDetail.getQty() + "");
@@ -222,12 +246,14 @@ public class PlaceOrderForm {
     }
 
     private void calculateTotal() {
-        BigDecimal total = new BigDecimal(0);
+
+        orderTotal = BigDecimal.ZERO;
 
         for (OrderDetails detail : tblOrderDetails.getItems()) {
-            total = total.add(detail.getTotal());
+            orderTotal = orderTotal.add(detail.getTotal());
         }
-        lblTotal.setText("Total: " +total);
+
+        lblTotal.setText(String.format("Total: %.2f", orderTotal));
     }
 
     private void enableOrDisablePlaceOrderButton() {
@@ -238,7 +264,81 @@ public class PlaceOrderForm {
     public void txtQty_OnAction(ActionEvent event) {
     }
 
+/*
     public void btnAdd_OnAction(ActionEvent event) {
+
+        if (cmbItemCode.getValue() == null) {
+            new Alert(Alert.AlertType.ERROR, "Select item").show();
+            return;
+        }
+
+        if (!txtQty.getText().matches("\\d+")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid qty").show();
+            return;
+        }
+
+        int qty = Integer.parseInt(txtQty.getText());
+
+        if (qty <= 0 || qty > Integer.parseInt(txtQtyOnHand.getText())) {
+            new Alert(Alert.AlertType.ERROR, "Invalid qty range").show();
+            return;
+        }
+
+        try {
+            String itemCode = cmbItemCode.getValue();
+            ItemDTO item = orderBO.findItem(itemCode);
+
+            BigDecimal unitPrice = item.getUnitPrice().setScale(2);
+            BigDecimal total = unitPrice.multiply(BigDecimal.valueOf(qty));
+
+            // check existing row
+            OrderDetails existing = tblOrderDetails.getItems()
+                    .stream()
+                    .filter(d -> d.getItemCode().equals(itemCode))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existing != null) {
+
+                existing.setQty(existing.getQty() + qty);
+
+                existing.setTotal(
+                        existing.getUnitPrice()
+                                .multiply(BigDecimal.valueOf(existing.getQty()))
+                );
+
+            } else {
+
+                tblOrderDetails.getItems().add(
+                        new OrderDetails(
+                                item.getCode(),
+                                item.getDescription(),
+                                qty,
+                                unitPrice,
+                                total,
+                                item.getStorage(),
+                                item.getColor(),
+                                item.getEmiNo(),
+                                item.getWarranty()
+                        )
+                );
+            }
+
+            tblOrderDetails.refresh();
+            calculateTotal();
+
+            txtQty.clear();
+            cmbItemCode.getSelectionModel().clearSelection();
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+*/
+
+
+   /* public void btnAdd_OnAction(ActionEvent event) {
+
         if (!txtQty.getText().matches("\\d+") || Integer.parseInt(txtQty.getText()) <= 0 ||
                 Integer.parseInt(txtQty.getText()) > Integer.parseInt(txtQtyOnHand.getText())) {
             new Alert(Alert.AlertType.ERROR, "Invalid qty").show();
@@ -247,40 +347,229 @@ public class PlaceOrderForm {
             return;
         }
 
-        String itemCode = cmbItemCode.getSelectionModel().getSelectedItem();
-        String description = txtDescription.getText();
-        BigDecimal unitPrice = new BigDecimal(txtUnitPrice.getText()).setScale(2);
-        int qty = Integer.parseInt(txtQty.getText());
-        BigDecimal total = unitPrice.multiply(new BigDecimal(qty)).setScale(2);
+        String itemCode = cmbItemCode.getValue();
 
-        boolean exists = tblOrderDetails.getItems().stream().anyMatch(detail -> detail.getCode().equals(itemCode));
+        try {
+            ItemDTO item = orderBO.findItem(itemCode);
 
-        if (exists) {
-            OrderDetails orderDetailTM = tblOrderDetails.getItems().stream().filter(detail -> detail.getCode().equals(itemCode)).findFirst().get();
+            int qty = Integer.parseInt(txtQty.getText());
+            BigDecimal unitPrice = item.getUnitPrice().setScale(2);
+            BigDecimal total = unitPrice.multiply(BigDecimal.valueOf(qty));
 
-            if (btnSave.getText().equalsIgnoreCase("Update")) {
-                orderDetailTM.setQty(qty);
-                orderDetailTM.setTotal(total);
-                tblOrderDetails.getSelectionModel().clearSelection();
+            boolean exists = tblOrderDetails.getItems()
+                    .stream()
+                    .anyMatch(d -> d.getItemCode().equals(itemCode));
+
+            if (exists) {
+
+                OrderDetails detail = tblOrderDetails.getItems()
+                        .stream()
+                        .filter(d -> d.getItemCode().equals(itemCode))
+                        .findFirst()
+                        .get();
+
+                if (btnSave.getText().equalsIgnoreCase("Update")) {
+                    detail.setQty(qty);
+                } else {
+                    detail.setQty(detail.getQty() + qty);
+                }
+
+                detail.setUnitPrice(unitPrice);
+                detail.setTotal(detail.getUnitPrice().multiply(BigDecimal.valueOf(detail.getQty())));
+
             } else {
-                orderDetailTM.setQty(orderDetailTM.getQty() + qty);
-                total = new BigDecimal(orderDetailTM.getQty()).multiply(unitPrice).setScale(2);
-                orderDetailTM.setTotal(total);
-            }
-            tblOrderDetails.refresh();
-        } else {
-            tblOrderDetails.getItems().add(new OrderDetails(itemCode, description, qty, unitPrice, total));
-        }
-        cmbItemCode.getSelectionModel().clearSelection();
-        cmbItemCode.requestFocus();
-        calculateTotal();
-        enableOrDisablePlaceOrderButton();
-    }
 
+                tblOrderDetails.getItems().add(
+                        new OrderDetails(
+                                item.getCode(),
+                                item.getDescription(),
+                                qty,
+                                unitPrice,
+                                total,
+                                item.getStorage(),
+                                item.getColor(),
+                                item.getEmiNo(),
+                                item.getWarranty()
+                        )
+                );
+            }
+
+            tblOrderDetails.refresh();
+            calculateTotal();
+            enableOrDisablePlaceOrderButton();
+
+            cmbItemCode.getSelectionModel().clearSelection();
+            txtQty.clear();
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }*/
+
+    public void btnAdd_OnAction(ActionEvent event) {
+
+        if (cmbItemCode.getValue() == null) {
+            new Alert(Alert.AlertType.ERROR, "Select item").show();
+            return;
+        }
+
+        if (!txtQty.getText().matches("\\d+")) {
+            new Alert(Alert.AlertType.ERROR, "Invalid qty").show();
+            return;
+        }
+
+        int qty = Integer.parseInt(txtQty.getText());
+        int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
+
+        if (qty <= 0 || qty > qtyOnHand) {
+            new Alert(Alert.AlertType.ERROR, "Invalid qty range").show();
+            return;
+        }
+
+        try {
+            String itemCode = cmbItemCode.getValue();
+            ItemDTO item = orderBO.findItem(itemCode);
+
+            BigDecimal unitPrice = item.getUnitPrice().setScale(2);
+
+            OrderDetails existing = tblOrderDetails.getItems()
+                    .stream()
+                    .filter(d -> d.getItemCode().equals(itemCode))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existing != null) {
+
+                if (btnSave.getText().equalsIgnoreCase("Update")) {
+                    // 🔥 REPLACE qty
+                    existing.setQty(qty);
+                } else {
+                    // 🔥 ADD qty
+                    existing.setQty(existing.getQty() + qty);
+                }
+
+                existing.setTotal(
+                        existing.getUnitPrice()
+                                .multiply(BigDecimal.valueOf(existing.getQty()))
+                );
+
+            } else {
+
+                BigDecimal total = unitPrice.multiply(BigDecimal.valueOf(qty));
+
+                tblOrderDetails.getItems().add(
+                        new OrderDetails(
+                                item.getCode(),
+                                item.getDescription(),
+                                qty,
+                                unitPrice,
+                                total,
+                                item.getStorage(),
+                                item.getColor(),
+                                item.getEmiNo(),
+                                item.getWarranty()
+                        )
+                );
+            }
+
+            tblOrderDetails.refresh();
+            calculateTotal();
+            enableOrDisablePlaceOrderButton();
+
+            // reset UI
+            btnSave.setText("Add");
+            cmbItemCode.setDisable(false);
+            cmbItemCode.getSelectionModel().clearSelection();
+            txtQty.clear();
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+    private void printInvoice(String orderId) {
+
+        try {
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(
+                    getClass().getResourceAsStream("/reports/Invoice_1.jrxml")
+            );
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("my_invoice_id", orderId);
+
+            Connection connection = DBconnection.getdBconnection().getConnection();
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    params,
+                    connection
+            );
+
+            JasperViewer.viewReport(jasperPrint, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Invoice load failed").show();
+        }
+    }
+    public void btnPlaceOrder_OnAction(ActionEvent event) {
+
+        try {
+
+            List<OrderDetailDTO> detailDTOList =
+                    tblOrderDetails.getItems()
+                            .stream()
+                            .map(tm -> new OrderDetailDTO(
+                                    orderId,
+                                    tm.getItemCode(),
+                                    tm.getDescription(),
+                                    tm.getQty(),
+                                    tm.getUnitPrice(),
+                                    tm.getTotal(),
+                                    tm.getStorage(),
+                                    tm.getColor(),
+                                    tm.getEmiNo(),
+                                    tm.getWarranty()
+                            ))
+                            .collect(Collectors.toList());
+
+            boolean success = orderBO.saveOrder(
+                    new OrderDTO(
+                            orderId,
+                            LocalDate.now(),
+                            cmbCustomerId.getValue(),
+                            txtCustomerName.getText(),
+                            orderTotal
+                    ),
+                    detailDTOList
+            );
+
+            if (success) {
+                new Alert(Alert.AlertType.INFORMATION, "Order placed successfully").show();
+                printInvoice(orderId);
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Order failed").show();
+            }
+
+            // reset UI
+            orderId = generateNewOrderId();
+            lblId.setText("Order ID: " + orderId);
+
+            cmbCustomerId.getSelectionModel().clearSelection();
+            cmbItemCode.getSelectionModel().clearSelection();
+            tblOrderDetails.getItems().clear();
+            txtQty.clear();
+            calculateTotal();
+
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+/*
     public void btnPlaceOrder_OnAction(ActionEvent event) {
 
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
-                tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+                tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId, tm.getItemCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
@@ -297,6 +586,7 @@ public class PlaceOrderForm {
         calculateTotal();
 
     }
+*/
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
 
         /*Transaction*/
@@ -376,6 +666,5 @@ public class PlaceOrderForm {
         App.setRoot("login-Form");
 
     }
-
 
 }

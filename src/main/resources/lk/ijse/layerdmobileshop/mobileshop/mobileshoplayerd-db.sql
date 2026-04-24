@@ -5,48 +5,79 @@ use mobileshoplayerd;
 
 DROP TABLE IF EXISTS `Customer`;
 
-CREATE TABLE `Customer` (
-                            `id` varchar(30) NOT NULL,
-                            `name` varchar(40) DEFAULT NULL,
-                            `address` varchar(100) DEFAULT NULL,
-                            `mobile` varchar(100) DEFAULT NULL,
-                            PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE Customer (
+                          id VARCHAR(30) NOT NULL,
+                          name VARCHAR(40),
+                          address VARCHAR(100),
+                          mobile VARCHAR(100),
+
+                          PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 DROP TABLE IF EXISTS `Item`;
 
-CREATE TABLE `Item` (
-                        `code` varchar(255) NOT NULL,
-                        `description` varchar(255) DEFAULT NULL,
-                        `qtyOnHand` int(10) DEFAULT NULL,
-                        `unitPrice` decimal(10,2) DEFAULT NULL,
-                        PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE Item (
+                      code VARCHAR(50) NOT NULL,
+                      description VARCHAR(255),
+                      receivedDate DATE,
+                      qtyOnHand INT,
+                      unitPrice DECIMAL(10,2),
+                      storage VARCHAR(50),
+                      color VARCHAR(50),
+                      emiNo VARCHAR(50),
+                      warranty VARCHAR(100),
+
+                      PRIMARY KEY (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 DROP TABLE IF EXISTS `Orders`;
 
 
-CREATE TABLE `Orders` (
-                          `oid` varchar(255) NOT NULL,
-                          `date` date DEFAULT NULL,
-                          `customerID` varchar(255) DEFAULT NULL,
-                          PRIMARY KEY (`oid`),
-                          KEY `customerID` (`customerID`),
-                          CONSTRAINT `Orders_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `Customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE Orders (
+                        oid VARCHAR(50) NOT NULL,
+                        date DATE,
+                        customerID VARCHAR(30),
+                        orderTotal DECIMAL(10,2) DEFAULT 0.00,
+
+                        PRIMARY KEY (oid),
+
+                        CONSTRAINT fk_customer
+                            FOREIGN KEY (customerID)
+                                REFERENCES Customer(id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `OrderDetails`;
 
-CREATE TABLE `OrderDetails` (
-                                `oid` varchar(255) NOT NULL,
-                                `itemCode` varchar(255) NOT NULL,
-                                `qty` int(10) DEFAULT NULL,
-                                `unitPrice` decimal(10,2) DEFAULT NULL,
-                                PRIMARY KEY (`oid`,`itemCode`),
-                                KEY `itemCode` (`itemCode`),
-                                CONSTRAINT `OrderDetails_ibfk_1` FOREIGN KEY (`oid`) REFERENCES `Orders` (`oid`) ON DELETE CASCADE ON UPDATE CASCADE,
-                                CONSTRAINT `OrderDetails_ibfk_2` FOREIGN KEY (`itemCode`) REFERENCES `Item` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE OrderDetails (
+                              oid VARCHAR(50) NOT NULL,
+                              itemCode VARCHAR(50) NOT NULL,
+                              description VARCHAR(255),
+                              qty INT,
+                              unitPrice DECIMAL(10,2),
+                              storage VARCHAR(50),
+                              color VARCHAR(50),
+                              emiNo VARCHAR(50),
+                              warranty VARCHAR(50),
+                              total DECIMAL(10,2),
+
+                              PRIMARY KEY (oid, itemCode),
+
+                              CONSTRAINT fk_order
+                                  FOREIGN KEY (oid)
+                                      REFERENCES Orders(oid)
+                                      ON DELETE CASCADE
+                                      ON UPDATE CASCADE,
+
+                              CONSTRAINT fk_item
+                                  FOREIGN KEY (itemCode)
+                                      REFERENCES Item(code)
+                                      ON DELETE CASCADE
+                                      ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `User`;
 

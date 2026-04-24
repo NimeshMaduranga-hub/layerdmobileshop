@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
-import lk.ijse.layerdmobileshop.mobileshop.bo.custom.LoginBO;
+import lk.ijse.layerdmobileshop.mobileshop.bo.custom.UserBO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.User;
 
 import java.io.IOException;
@@ -22,8 +22,8 @@ public class LoginControllerForm {
     @FXML
     private PasswordField txtPassword;
 
-    LoginBO loginBO =
-            (LoginBO) BOFactory.getInstance().getBo(BOFactory.BOType.LOGIN);
+    UserBO loginBO =
+            (UserBO) BOFactory.getInstance().getBo(BOFactory.BOType.LOGIN);
 
     @FXML
     void btnLoginOnAction(ActionEvent event) {

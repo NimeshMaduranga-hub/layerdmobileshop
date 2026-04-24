@@ -24,14 +24,14 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public boolean save(Orders orders) throws SQLException, ClassNotFoundException {
-        try {
 
-            return CRUDUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)", orders.getOrderId(), Date.valueOf(orders.getOrderDate()), orders.getCustomerId());
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
+        return CRUDUtil.execute(
+                "INSERT INTO `Orders` (oid, date, customerID, orderTotal) VALUES (?,?,?,?)",
+                orders.getOrderId(),
+                Date.valueOf(orders.getOrderDate()),
+                orders.getCustomerId(),
+                orders.getOrderTotal()
+        );
     }
 
     @Override

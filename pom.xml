@@ -15,6 +15,12 @@
     </properties>
 
     <dependencies>
+        <!-- JasperReports -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.20.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.jfoenix</groupId>

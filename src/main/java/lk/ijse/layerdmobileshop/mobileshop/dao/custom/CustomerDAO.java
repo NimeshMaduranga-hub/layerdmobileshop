@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface CustomerDAO extends CrudDAO<Customer> {
+
      boolean isExist(String id) throws SQLException, ClassNotFoundException;
 
      String genarateNewId() throws SQLException, ClassNotFoundException;
+
     }
