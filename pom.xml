@@ -15,7 +15,28 @@
     </properties>
 
     <dependencies>
-        <!-- JasperReports -->
+        <!-- JasperReports Core -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.0</version>
+        </dependency>
+
+        <!-- JasperReports Fonts -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+            <version>6.21.0</version>
+        </dependency>
+
+        <!-- JasperReports Javaflow -->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-javaflow</artifactId>
+            <version>6.21.0</version>
+        </dependency>
+
+        <!-- JasperReports JDT (for compiling .jrxml files) -->
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>

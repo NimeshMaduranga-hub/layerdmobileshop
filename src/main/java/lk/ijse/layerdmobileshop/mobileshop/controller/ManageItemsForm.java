@@ -10,6 +10,9 @@ import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
 import lk.ijse.layerdmobileshop.mobileshop.bo.custom.ItemBO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Item;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -465,8 +468,14 @@ public class ManageItemsForm {
 
     }
 
-    public void printStockReport(ActionEvent event) {
+    public void printStockReport(ActionEvent event) throws JRException {
+
         //step ONE Jasperreport
-       InputStream inputStream = getClass().getResourceAsStream("lk/ijse/layerdmobileshop/mobileshop/reports/stockReport.jrxml");
+       InputStream reportObject = getClass().getResourceAsStream("lk/ijse/layerdmobileshop/mobileshop/reports/stockReport.jrxml");
+
+       //Complie jasperRepor
+       JasperReport jr = JasperCompileManager.compileReport(reportObject);//throw jr Exception
+
     }
+
 }
