@@ -8,15 +8,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
 import lk.ijse.layerdmobileshop.mobileshop.bo.custom.ItemBO;
+import lk.ijse.layerdmobileshop.mobileshop.db.DBconnection;
 import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Item;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -468,7 +468,9 @@ public class ManageItemsForm {
 
     }
 
-    public void printStockReport(ActionEvent event) throws JRException {
+    public void printStockReport(ActionEvent event) throws JRException, SQLException, ClassNotFoundException {
+
+        Connection conn =DBconnection.getdBconnection().getConnection();
 
         //step ONE Jasperreport
        InputStream reportObject = getClass().getResourceAsStream("lk/ijse/layerdmobileshop/mobileshop/reports/stockReport.jrxml");
@@ -476,6 +478,10 @@ public class ManageItemsForm {
        //Complie jasperRepor
        JasperReport jr = JasperCompileManager.compileReport(reportObject);//throw jr Exception
 
+        //JasperFill Manager
+       JasperPrint jp = JasperFillManager.fillReport(jr,null,conn);//Parameter denawa Methenna Parameter thiyenawanam,ConnectionObject eka
+
+        //
     }
 
 }
