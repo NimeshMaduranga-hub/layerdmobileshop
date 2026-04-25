@@ -12,6 +12,7 @@ import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Item;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -462,10 +463,10 @@ public class ManageItemsForm {
 
     public void btnLogoutOnAction(ActionEvent event) throws IOException {
 
-
     }
 
     public void printStockReport(ActionEvent event) {
-
+        //step ONE Jasperreport
+       InputStream inputStream = getClass().getResourceAsStream("lk/ijse/layerdmobileshop/mobileshop/reports/stockReport.jrxml");
     }
 }
