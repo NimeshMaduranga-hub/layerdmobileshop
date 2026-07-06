@@ -11,7 +11,9 @@ import lk.ijse.layerdmobileshop.mobileshop.bo.custom.ItemBO;
 import lk.ijse.layerdmobileshop.mobileshop.db.DBconnection;
 import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.Item;
+import net.sf.jasperreports.view.JasperViewer;
 import net.sf.jasperreports.engine.*;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -468,20 +470,65 @@ public class ManageItemsForm {
 
     }
 
-    public void printStockReport(ActionEvent event) throws JRException, SQLException, ClassNotFoundException {
 
-        Connection conn =DBconnection.getdBconnection().getConnection();
 
-        //step ONE Jasperreport
-       InputStream reportObject = getClass().getResourceAsStream("lk/ijse/layerdmobileshop/mobileshop/reports/stockReport.jrxml");
 
-       //Complie jasperRepor
-       JasperReport jr = JasperCompileManager.compileReport(reportObject);//throw jr Exception
+    public void haddleStockPrint() {
+        try {
+            Connection conn = DBconnection.getdBconnection().getConnection();
 
-        //JasperFill Manager
-       JasperPrint jp = JasperFillManager.fillReport(jr,null,conn);//Parameter denawa Methenna Parameter thiyenawanam,ConnectionObject eka
+            // =========================
+            // ✔️ STEP 1: Load JRXML correctly
+            // =========================
+            InputStream reportObject =
+                    App.class.getResourceAsStream(
+                            "/lk/ijse/layerdmobileshop/mobileshop/reports/pasiStock.jrxml"
+                    );
 
-        //
+            // =========================
+            // ❗ SAFETY CHECK
+            // =========================
+            if (reportObject == null) {
+                throw new RuntimeException("❌ JRXML file not found! Check path: /reports/pasiStock.jrxml");
+            }
+
+            // =========================
+            // ✔️ STEP 2: Compile report
+            // =========================
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportObject);
+
+            // =========================
+            // ✔️ STEP 3: Fill report
+            // =========================
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    null,
+                    conn
+            );
+
+            // =========================
+            // ✔️ STEP 4: View report
+            // =========================
+            JasperViewer.viewReport(jasperPrint, false);
+
+        } catch (JRException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Jasper Report Error: " + e.getMessage()).show();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Database Error: " + e.getMessage()).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Something went wrong: " + e.getMessage()).show();
+        }
     }
 
+    public void printStockReport(ActionEvent event) {
+        try {
+            haddleStockPrint();
+        }catch (Exception e){
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR,"Something Went Wrong").show();
+        }
+    }
 }

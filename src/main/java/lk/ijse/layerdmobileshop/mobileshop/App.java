@@ -16,7 +16,7 @@ public class App extends Application {
        /* FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("login-Form.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setTitle("Customer View");*/
-        scene=new Scene(loadFXML("login-Form"),800,600);
+        scene=new Scene(loadFXML("login-Form"),1280,720);
         stage.setScene(scene);
         stage.show();
     }

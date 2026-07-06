@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Main container */
+        .report-container {
+            width: 95%;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .company h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .company p {
+            margin: 3px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Title */
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #f39c12;
+            margin: 20px 0;
+        }
+
+        /* Print button */
+        .print-btn {
+            padding: 10px 15px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            height: fit-content;
+        }
+
+        .print-btn:hover {
+            background: darkgreen;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* Print mode */
+        @media print {
+            .print-btn {
+                display: none;
+            }
+            body {
+                background: white;
+            }
+        }
+        .logoimage{
+            position:relative;
+            max-width: 300px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="report-container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <div class="company">
+            <h2>PASI MOBILE (PVT) LTD</h2>
+            <p>Kalugamuwa - Wariyapola Road</p>
+            <p>Tel: 077 475 7669</p>
+            <img class="logoimage" src="../image/Artboard%204.png">
+        </div>
+
+        <button class="print-btn" onclick="window.print()">Print Report</button>
+
+    </div>
+
+    <!-- Title -->
+    <div class="title">STOCK REPORT</div>
+
+    <!-- Table -->
+    <table>
+        <tr>
+            <th>Code</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Storage</th>
+            <th>Color</th>
+            <th>EMI No</th>
+            <th>Warranty</th>
+        </tr>
+
+        <!-- Sample rows -->
+        <tr>
+            <td>ITM001</td>
+            <td>iPhone 14</td>
+            <td>2026-04-25</td>
+            <td>10</td>
+            <td>250000</td>
+            <td>128GB</td>
+            <td>Black</td>
+            <td>EMI-01</td>
+            <td>1 Year</td>
+        </tr>
+
+        <tr>
+            <td>ITM002</td>
+            <td>Samsung S23</td>
+            <td>2026-04-20</td>
+            <td>5</td>
+            <td>220000</td>
+            <td>256GB</td>
+            <td>Blue</td>
+            <td>EMI-02</td>
+            <td>1 Year</td>
+        </tr>
+
+    </table>
+
+    <!-- Footer -->
+    <div class="footer">
+        © 2026 Pasi Mobile - Stock Management System
+    </div>
+
+</div>
+
+</body>
+</html>

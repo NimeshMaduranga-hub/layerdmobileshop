@@ -2,12 +2,21 @@ package lk.ijse.layerdmobileshop.mobileshop.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import lk.ijse.layerdmobileshop.mobileshop.App;
 import lk.ijse.layerdmobileshop.mobileshop.bo.BOFactory;
 import lk.ijse.layerdmobileshop.mobileshop.bo.custom.PlaceOrderBO;
@@ -16,10 +25,20 @@ import lk.ijse.layerdmobileshop.mobileshop.dto.ItemDTO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.OrderDTO;
 import lk.ijse.layerdmobileshop.mobileshop.dto.OrderDetailDTO;
 import lk.ijse.layerdmobileshop.mobileshop.entity.OrderDetails;
+import javafx.concurrent.Worker;
+import javafx.print.PrinterJob;
+import javafx.scene.web.WebEngine;
+
 
 import lk.ijse.layerdmobileshop.mobileshop.db.DBconnection;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.view.JasperViewer;
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
+import lk.ijse.layerdmobileshop.mobileshop.util.PdfGenerator;
+
+import java.awt.*;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.HashMap;
 
@@ -52,6 +71,8 @@ public class PlaceOrderForm {
     public Label lblTotal;
     private String orderId;
     private BigDecimal orderTotal = BigDecimal.ZERO;
+    @FXML
+    private WebView webViewInvoice;
 
     @FXML private TableColumn<OrderDetails, String> colItemCode;
     @FXML private TableColumn<OrderDetails, String> colDescription;
@@ -486,52 +507,27 @@ public class PlaceOrderForm {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-    private void printInvoice(String orderId) {
+
+
+
+    public void btnPlaceOrder_OnAction(ActionEvent e) {
 
         try {
-
-            JasperReport jasperReport = JasperCompileManager.compileReport(
-                    getClass().getResourceAsStream("/reports/Invoice_1.jrxml")
-            );
-
-            HashMap<String, Object> params = new HashMap<>();
-            params.put("my_invoice_id", orderId);
-
-            Connection connection = DBconnection.getdBconnection().getConnection();
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport,
-                    params,
-                    connection
-            );
-
-            JasperViewer.viewReport(jasperPrint, false);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Invoice load failed").show();
-        }
-    }
-    public void btnPlaceOrder_OnAction(ActionEvent event) {
-
-        try {
-
-            List<OrderDetailDTO> detailDTOList =
-                    tblOrderDetails.getItems()
-                            .stream()
-                            .map(tm -> new OrderDetailDTO(
-                                    orderId,
-                                    tm.getItemCode(),
-                                    tm.getDescription(),
-                                    tm.getQty(),
-                                    tm.getUnitPrice(),
-                                    tm.getTotal(),
-                                    tm.getStorage(),
-                                    tm.getColor(),
-                                    tm.getEmiNo(),
-                                    tm.getWarranty()
-                            ))
-                            .collect(Collectors.toList());
+            List<OrderDetailDTO> details = tblOrderDetails.getItems()
+                    .stream()
+                    .map(d -> new OrderDetailDTO(
+                            orderId,
+                            d.getItemCode(),
+                            d.getDescription(),
+                            d.getQty(),
+                            d.getUnitPrice(),
+                            d.getTotal(),
+                            d.getStorage(),
+                            d.getColor(),
+                            d.getEmiNo(),
+                            d.getWarranty()
+                    ))
+                    .collect(Collectors.toList());
 
             boolean success = orderBO.saveOrder(
                     new OrderDTO(
@@ -541,31 +537,312 @@ public class PlaceOrderForm {
                             txtCustomerName.getText(),
                             orderTotal
                     ),
-                    detailDTOList
+                    details
             );
 
             if (success) {
-                new Alert(Alert.AlertType.INFORMATION, "Order placed successfully").show();
-                printInvoice(orderId);
-            } else {
-                new Alert(Alert.AlertType.ERROR, "Order failed").show();
+                new Alert(Alert.AlertType.INFORMATION, "Order Success").showAndWait();
+                String html = generateInvoiceHtml();
+
+                try {
+                    String fileName = "invoice_" + orderId + ".pdf";
+
+                    PdfGenerator.generatePdf(html, fileName);
+
+                    // optional auto open + print
+                    Desktop.getDesktop().open(new File(fileName));
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                reset();
+
             }
 
-            // reset UI
-            orderId = generateNewOrderId();
-            lblId.setText("Order ID: " + orderId);
 
-            cmbCustomerId.getSelectionModel().clearSelection();
-            cmbItemCode.getSelectionModel().clearSelection();
-            tblOrderDetails.getItems().clear();
-            txtQty.clear();
-            calculateTotal();
-
-        } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
-/*
+    private void reset() {
+        tblOrderDetails.getItems().clear();
+        orderId = generateNewOrderId();
+        lblId.setText(orderId);
+        calculateTotal();
+    }
+
+    private String generateOrderId() {
+        try {
+            return orderBO.genarateNewId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "OID-001";
+        }
+    }
+    // ================= HTML INVOICE =================
+    private String generateInvoiceHtml() {
+
+        StringBuilder rows = new StringBuilder();
+
+        for (OrderDetails d : tblOrderDetails.getItems()) {
+            System.out.println("Unit Price Type : " + d.getUnitPrice().getClass());
+            System.out.println("Total Type      : " + d.getTotal().getClass());
+            System.out.println("EMI Type        : " + d.getEmiNo().getClass());
+            System.out.println("Warranty Type   : " + d.getWarranty().getClass());
+
+            rows.append("""
+<tr>
+    <td>%s</td>
+    <td>%s</td>
+    <td>%s / %s</td>
+    <td style="text-align:right;">%d</td>
+    <td style="text-align:right;">%.2f</td>
+    <td style="text-align:right;">%s</td>
+    <td style="text-align:right;">%s</td>
+    <td style="text-align:right;">%.2f</td>
+</tr>
+""".formatted(
+                    d.getItemCode(),
+                    d.getDescription(),
+                    d.getStorage(),
+                    d.getColor(),
+                    d.getQty(),
+                    d.getUnitPrice(),
+                    d.getEmiNo(),
+                    d.getWarranty(),
+                    d.getTotal()
+            ));
+        }
+
+        URL logoUrl = getClass().getResource("/lk/ijse/layerdmobileshop/mobileshop/image/Artboard 6.png");
+
+        if (logoUrl == null) {
+            throw new RuntimeException("Logo image not found!");
+        }
+
+        String logo = logoUrl.toExternalForm();
+        String orderId = this.orderId;
+        String date = LocalDate.now().toString();
+        String customer = cmbCustomerId.getValue() + " - " + txtCustomerName.getText();
+
+        String html = """
+                <!DOCTYPE html>
+                       <html>
+                       <head>
+                       <meta charset="UTF-8"/>
+                       <style>
+                       @page {
+                           size: A4;
+                           margin: 0;
+                       }
+                       body {
+                           margin: 0;
+                           padding: 0;
+                           font-family: Arial, sans-serif;
+                       }
+                       table {
+                           border-collapse: collapse;
+                       }
+                       </style>
+                       </head>
+                       <body>
+                
+                       <table width="100%%" height="100%%" cellpadding="0" cellspacing="0" style="width:100%%; border:2px solid #ff9500; padding:20px;">
+                       <tr>
+                       <td style="padding:20px;">
+                
+                           <!-- OUTER PAGE TABLE: header / body / footer rows -->
+                           <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                
+                               <!-- HEADER ROW -->
+                               <tr>
+                                   <td style="border-bottom:4px solid #ff9500; padding-bottom:14px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                                           <tr>
+                                               <td width="55%%" valign="top" style="text-align:left;">
+                                                   <img src="%s" style="width:190px; max-height:70px;"/><br/>
+                                                   <span style="font-size:11px; letter-spacing:0.5px; color:#7e4700; font-weight:bold; text-transform:uppercase;">Find the Best, Right Here</span>
+                                               </td>
+                                               <td width="45%%" valign="top" style="text-align:right;">
+                                                   <span style="font-size:28px; font-weight:bold; color:#171717; letter-spacing:1px;">INVOICE</span><br/>
+                                                   <span style="font-size:12px; color:#d4a017; font-weight:bold; letter-spacing:2px;">MOBILE SHOP</span>
+                                               </td>
+                                           </tr>
+                                       </table>
+                                   </td>
+                               </tr>
+                
+                               <!-- INFO CARDS ROW -->
+                               <tr>
+                                   <td style="padding-top:18px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                                           <tr>
+                                               <td width="33%%" style="background:#fafafa; border:1px solid #e2e8f0; padding:10px 14px;">
+                                                   <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#8a8a8a; font-weight:bold;">Order ID</span><br/>
+                                                   <span style="font-size:14px; font-weight:bold; color:#171717;">%s</span>
+                                               </td>
+                                               <td width="2%%">&#160;</td>
+                                               <td width="33%%" style="background:#fafafa; border:1px solid #e2e8f0; padding:10px 14px;">
+                                                   <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#8a8a8a; font-weight:bold;">Date</span><br/>
+                                                   <span style="font-size:14px; font-weight:bold; color:#171717;">%s</span>
+                                               </td>
+                                               <td width="2%%">&#160;</td>
+                                               <td width="30%%" style="background:#fafafa; border:1px solid #e2e8f0; padding:10px 14px;">
+                                                   <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:#8a8a8a; font-weight:bold;">Customer</span><br/>
+                                                   <span style="font-size:14px; font-weight:bold; color:#171717;">%s</span>
+                                               </td>
+                                           </tr>
+                                       </table>
+                                   </td>
+                               </tr>
+                
+                               <!-- ITEMS TABLE -->
+                               <tr>
+                                   <td style="padding-top:22px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%; font-size:12px;">
+                                           <tr>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:left;">Code</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:left;">Description</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:left;">Details</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:right;">Qty</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:right;">Unit Price</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:right;">EmiNo</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:right;">Warranty</th>
+                                               <th style="background:#f4c430; color:#000000; padding:8px; text-align:right;">Total</th>
+                                           </tr>
+                                           %s
+                                       </table>
+                                   </td>
+                               </tr>
+                
+                               <!-- TERMS AND CONDITIONS -->
+                               <tr>
+                                   <td style="padding-top:20px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                                           <tr>
+                                               <td style="background:#fafafa; border:1px solid #e2e8f0; border-left:4px solid #ff9500; padding:10px 14px;">
+                                                   <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#171717; font-weight:bold;">Terms &amp; Conditions</span><br/>
+                                                   <span style="font-size:10px; color:#525252; line-height:1.7;">
+                                                       &#8226; One-month phone-to-phone warranty.<br/>
+                                                       &#8226; One-year software warranty.<br/>
+                                                       &#8226; No cash-back warranty.<br/>
+                                                       &#8226; No warranty for display, Face ID, fingerprint, physical damage or water damage.
+                                                   </span>
+                                               </td>
+                                           </tr>
+                                       </table>
+                                   </td>
+                               </tr>
+                
+                               <!-- SIGNATURES -->
+                               <tr>
+                                   <td style="padding-top:36px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                                           <tr>
+                                               <td width="45%%" style="border-top:1px solid #171717; padding-top:6px; text-align:center; font-size:11px; color:#525252; font-weight:bold;">
+                                                   Customer Signature
+                                               </td>
+                                               <td width="10%%">&#160;</td>
+                                               <td width="45%%" style="border-top:1px solid #171717; padding-top:6px; text-align:center; font-size:11px; color:#525252; font-weight:bold;">
+                                                   Authorized Signature
+                                               </td>
+                                           </tr>
+                                       </table>
+                                   </td>
+                               </tr>
+                            
+                
+                                                    <!-- THANK YOU NOTE -->
+                                                    <tr>
+                                                        <td style="padding-top:14px; text-align:center;">
+                                                            <span style="font-size:12px; color:#7e4700; font-weight:bold; letter-spacing:0.3px;">
+                                                                Thank you for your purchase  Have a great shopping experience!
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                
+                               <!-- SPACER TO PUSH FOOTER DOWN -->
+                               <tr>
+                                   <td style="height:100%%;">&#160;</td>
+                               </tr>
+                
+                               <!-- FOOTER ROW -->
+                               <tr>
+                                   <td style="border-top:1px solid #e2e8f0; padding-top:12px;">
+                                       <table width="100%%" cellpadding="0" cellspacing="0" style="width:100%%;">
+                                           <tr>
+                                               <td width="55%%" valign="bottom" style="font-size:11px; color:#525252; line-height:1.6;">
+                                                   <span style="font-size:13px; color:#171717; font-weight:bold;">Pasi Mobile</span><br/>
+                                                   Wariyapola, Sri Lanka<br/>
+                                                   Tel: 077 475 7669
+                                               </td>
+                                               <td width="45%%" valign="bottom" style="text-align:right;">
+                                                   <table cellpadding="0" cellspacing="0" align="right" style="background:#fff4e5; border:1px solid #ff9500; padding:10px 20px;">
+                                                       <tr>
+                                                           <td width="45%%" valign="bottom" style="text-align:left; padding-left:50px;">
+                                                               <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#d4a017; font-weight:bold;">Total Amount</span><br/>
+                                                               <span style="font-size:22px; font-weight:bold; color:#171717;">%.2f</span>
+                                                           </td>
+                                                       </tr>
+                                                   </table>
+                                               </td>
+                                           </tr>
+                                       </table>
+                                   </td>
+                               </tr>
+                               
+                               
+                
+                           </table>
+                
+                       </td>
+                       </tr>
+                       </table>
+                
+                       </body>
+                       </html>
+""".formatted(
+                logo,
+                orderId,
+                date,
+                customer,
+                rows.toString(),
+                orderTotal
+        );
+
+        return html;
+    }
+
+
+    private void loadInvoiceToWebView(String html) {
+
+        WebEngine engine = webViewInvoice.getEngine();
+        engine.loadContent(html);
+
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+
+        pause.setOnFinished(event -> {
+
+            PrinterJob job = PrinterJob.createPrinterJob();
+
+            if (job != null) {
+
+                boolean ok = job.showPrintDialog(webViewInvoice.getScene().getWindow());
+
+                if (ok) {
+                    engine.print(job);
+                    job.endJob();
+                }
+            }
+
+        });
+
+        pause.play();
+    }
+
+
+    /*
     public void btnPlaceOrder_OnAction(ActionEvent event) {
 
         boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
@@ -587,6 +864,8 @@ public class PlaceOrderForm {
 
     }
 */
+
+
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) {
 
         /*Transaction*/

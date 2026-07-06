@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Color Palette */
+      --primary: #f4c430;
+      --primary-dark: #d4a017;
+      --text-dark: #0d0d0e;
+      --text-light: #7e4700;
+      --bg-paper: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #525659; /* Dark background to see the paper clearly */
+      color: var(--text-dark);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- A4 PAGE CONTAINER --- */
+    .invoice-container {
+      width: 210mm; /* Strict A4 Width */
+      min-height: 297mm; /* Strict A4 Height */
+      margin: 0 auto;
+      background: var(--bg-paper);
+      /* Rounded corners for screen view only */
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- Content Wrapper (Margins) --- */
+    .content-padding {
+      padding: 20mm 15mm; /* Safe margins for A4 */
+      flex: 1;
+    }
+
+    /* --- Top Accent Bar --- */
+    .invoice-accent {
+      height: 8px;
+      background: var(--primary);
+      width: 100%;
+    }
+
+    /* --- Header Section --- */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+    .logopasi{
+      position: relative;
+      max-width: 250px;
+      top: -40px;
+      left: -200px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-placeholder {
+      width: 60px;
+      height: 60px;
+      background: #fff9e6;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+
+    .brand-text h1 {
+      margin: 0;
+      font-size: 26px;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-text p {
+      position: relative;
+      top: 20px;
+      margin: 0;
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .invoice-meta {
+      text-align: right;
+    }
+
+    .invoice-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-dark);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      opacity: 0.2;
+      line-height: 1;
+    }
+
+    .meta-details {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 13px;
+    }
+
+    .meta-row span:first-child {
+      color: var(--text-light);
+      font-weight: 500;
+      margin-right: 8px;
+    }
+
+    .meta-row span:last-child {
+      font-weight: 600;
+      color: var(--text-dark);
+      background: #fffbeb;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* --- Address Grid --- */
+    .address-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+
+    .address-card {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .address-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      letter-spacing: 1px;
+    }
+
+    .address-card p {
+      margin: 2px 0;
+      font-size: 12px;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+
+    .address-card strong {
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    /* --- Table Section --- */
+    .table-section {
+      margin-bottom: 25px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px; /* Slightly smaller for A4 fit */
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      background: #f9fafb;
+    }
+
+    td {
+      padding: 12px 12px;
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    /* Zebra Striping */
+    tbody tr:nth-child(even) {
+      background-color: #fcfcfc;
+    }
+
+    tbody tr:hover {
+      background-color: #fffbeb;
+    }
+
+    .col-total {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* --- Footer / Totals --- */
+    .footer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .notes {
+      flex: 1;
+      color: var(--text-light);
+      font-size: 11px;
+      max-width: 55%;
+    }
+
+    .notes h4 {
+      color: var(--text-dark);
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .total-card {
+      min-width: 200px;
+      text-align: right;
+    }
+
+    .grand-total {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 2px dashed var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grand-total label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .grand-total .amount {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    /* --- Print Action (UI Only) --- */
+    .action-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .btn-print {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(244, 196, 48, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-print:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* --- Footer Watermark --- */
+    .invoice-footer-msg {
+      text-align: center;
+      margin-top: auto; /* Pushes to bottom */
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 11px;
+    }
+
+    /* --- PRINT STYLES (CRITICAL FOR A4) --- */
+    @media print {
+      @page {
+        size: A4;
+        margin: 0; /* Remove browser margins */
+      }
+
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .invoice-container {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        page-break-after: always;
+      }
+
+      .action-bar {
+        display: none;
+      }
+    }
+
+    /* Mobile Screen View */
+    @media screen and (max-width: 220mm) {
+      body {
+        overflow-x: auto;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Print Button (Hidden in Print) -->
+<div class="action-bar">
+  <button class="btn-print" onclick="window.print()">Print Invoice</button>
+</div>
+
+<div class="invoice-container">
+  <div class="invoice-accent"></div>
+
+  <div class="content-padding">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="brand-section">
+        <div class="logo-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        </div>
+
+        <div class="brand-text">
+          <p>Find the Best, Right Here</p>
+        </div>
+
+      </div>
+
+      <div>
+        <img class="logopasi" src="${logo}" />
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-title">Invoice</div>
+        <div class="meta-details">
+          <div class="meta-row">
+            <span>Order ID:</span>
+            <span>${oid}</span>
+          </div>
+          <div class="meta-row">
+            <span>Date:</span>
+            <span>${date}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADDRESSES -->
+    <div class="address-section">
+      <!-- FROM (SHOP) -->
+      <div class="address-card">
+        <h3>Shop Address</h3>
+        <p><strong>Pasi Mobile</strong></p>
+        <p>Kalugamuwa-Wariyapola Rd,</p>
+        <p>Wariyapola, Sri Lanka</p>
+        <br>
+        <p>📞 077 475 7669</p>
+      </div>
+
+      <!-- TO (CUSTOMER) -->
+      <div class="address-card" style="border-left: 4px solid var(--primary);">
+        <h3>Bill To</h3>
+        <p><strong>${customerName}</strong></p>
+        <p>Customer ID: ${customerID}</p>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-section">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th style="width: 12%;">Code</th>
+            <th style="width: 30%;">Description</th>
+            <th style="text-align: center;">Details</th>
+            <th style="text-align: right; width: 8%;">Qty</th>
+            <th style="text-align: right; width: 15%;">Unit Price</th>
+            <th style="text-align: right; width: 15%;">Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          ${rows}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FOOTER / TOTALS -->
+    <div class="footer-section">
+      <div class="notes">
+        <h4>Terms & Conditions</h4>
+        <p>1. Goods once sold will not be taken back.</p>
+        <p>2. Warranty claims must be accompanied by this original invoice.</p>
+        <p>3. Payment is due upon receipt.</p>
+        <br>
+        <p><strong>EMI Option:</strong> ${emiNo}</p>
+      </div>
+
+      <div class="total-card">
+        <div class="grand-total">
+          <label>Order Total</label>
+          <div class="amount">${orderTotal}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-padding invoice-footer-msg">
+    Thank you for your purchase ❤️<br>
+    Have a great shopping experience!
+  </div>
+
+</div>
+
+</body>
+</html>
